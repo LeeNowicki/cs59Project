@@ -9,419 +9,66 @@ Author
 <div class="noheader firstcol">
                   |             
 ------------------|-------------
-name              | Aleksander Nowicki
-computer + OS     | Dell Latitude 7640, Windows 11 (Running WSL Ubuntu)
-time to complete  | 10+ hours (a long time, not sure)
-partner           | N/A
-additional help   | see Reflection section
+Group Members              | Aleksander Nowicki, Jacob Bacus, Henry Stauch
 </div>
 
 
 
-Test File 
+Domain
 ================
-My test file was just a .txt file that contained the following lines:
+Scheduling and calendar creation. 
 
-
-Passing Cases:
-
-John 
-
-1 John 
-
-John 1
-
-1 John 1
-
-1 John 1:2
-
-1 John 1:2-4
-
-1 John 1:2-4,1
-
-1 John 1:2-4,1-1
-
-1 John 1:2-4,1-1,1
-
-Genesis (james)
-
-Ps 12:1,3-4;
-
-Ps 12:1,3-4;1;1:1-3
-
-Rev 2:4;4:3-6 (NASB)
-
-9 Matthew 77:190-314 (MyOwnVersion)
-
-
-
-Failing Cases
-
-1
-
-1 1:1,1-1 (james)
-
-12 John 
-
-john 1-1
-
-john :1:1
-
-john 1:1:
-
-john 1:-1
-
-john 1;2;;
-
-john 12:12;1-1
-
-john (11)
-
-Genesis (james)(ButDifferent)
-
-Marco ()
-
-
-I did not count the number exactly, but there are more than 10 of each failing cases and passing cases in the file. 
-
-
-Implementations
+Problem
 ================
+It is hard to create and populate a personal calendar, as well as share it with other people.
 
+Valid Inputs
+================
+The language will have default keywords and classes built in to the language, with the user having the ability to extend them as necessary. These start with a capital letter, and each line must start with one of them.
 
-Recursive Descent Parser (C)
---------------------------------
-
-<!-- Details, source code, and screenshots here -->
-I did this one first, but it took a long time due to my stubborness. I initially copied the lexer02 next() function into my file to prevent difficulties with compiling, and then changed it to read from a file, but this caused complications down the line that I did not account for, and I ended up entirely refactoring it to parse the line into an array of tokens and then look through that. 
-
-It has some limitations due to not doing dynamic memory allocation: It cannot parse lines with more than 127 characters, or more than 127 individual tokens somehow, and no identifier may have more than 19 digits/letters. Also, I did not put any checks around reading from the file, so if there aren't enough arguments it will crash.
-
-It is also 300 lines long, so I will just include some important bits. 
-
+The following would be hello world in our language (using the Reminder keyword)
 ~~~
-// Main function
-int main (int argc, char* argv[]) {
-
-  // No safeguards, don't put anything weird/forget to put a file
-  FILE* fptr = fopen(argv[1], "r");
-  FILE* linePointer = fopen(argv[1], "r");
-
-  int* tokens = calloc(128, sizeof(int)); //Limit number of tokens in line to 128;
-  int* index = calloc(1, sizeof(int));
-  char buff[128]; //Limit to line size is 128
-   
-  // while((buff[0] = getc(fptr)) != EOF) {putchar(buff[0]);putchar('*');}
-
-  while (fgets(buff, sizeof(buff), linePointer)!= NULL) {
-
-    tokenizeLine(tokens, fptr);
-    //printf("\n%s", buff);
-    //for(int i = 0; tokens[i] !='\0'; i++) printf("%d (%c)\n", tokens[i], tokens[i]);
-
-    *index = 0;
-    if(s(tokens, index) && tokens[*index] == '\n'){
-      printf("PASS:%s", buff);
-    }
-    else {
-      printf("FAIL:%s", buff);
-
-    }
-  }
-
-  free(tokens);
-  free(index);
-
-}
-// ...
-
-//Refactored lexer function:
-
-
-//Modified again to tokenize a whole line
-//Puts it into the array it's passed in
-//Returns pointer to the array
-int* tokenizeLine(int* tokens, FILE* fptr) {
-    int t;
-    int index = 0;
-    t = getc(fptr); // Use getc
-    while (!(t == EOF || t == '\n')) {
-    int ctr=0;
-        while(t==' ' || t=='\t') t = getc(fptr);
-	if(isalpha(t)) {
-	  // have N - get rest
-	  value[ctr]=t;
-	  ctr++;
-	  t=getc(fptr);
-	  while(isalpha(t)) {
-            value[ctr]=t;
-	    ctr++;
-            t=getc(fptr);
-          }  
-          value[ctr]='\0';
-	  //Go back one index in the file
-	  //fseek(fptr, -1, SEEK_CUR);
-	  //ungetc(t,stdin);
-	  //testPrint(value);
-	  tokens[index++]= N;
-	}
-	else if(isdigit(t)) {
-	  value[ctr]=t;
-	  ctr++;
-          t=getc(fptr);
-	  while(isdigit(t)) {
-            value[ctr]=t;
-            t=getc(fptr);
-	    ctr++;
-          }
-          value[ctr]='\0';
-	  //Go back one index in the file
-	  //fseek(fptr, -1, SEEK_CUR);
-
-	  // testPrint(value);
-	  if(value[1] == '\0'){
-	    tokens[index++] = I;
-	  }
-	  else {
-	    tokens[index++] = D;
-	  }
-	}
-	else if (t==';' || t==':' || t==',' || t=='(' || t==')' || t=='-' ||
-	           t=='\r') {
-      tokens[index++] = t;
-	t = getc(fptr); // Use getc
-    }
-	//else tokens[index++] = ERR;
-    }
-    //Terminate the token stream
-    tokens[index++] = '\n';
-    tokens[index] = '\0';
-    
-    return tokens;
-
-} 
-
-
-// ... 
-
-//Example parsing function:
-
-//if x, then check if semicolon into another r, but always return true (rewind as needed)
-//Actually return if one of the others return -1
-int r(int* tokens, int* index) {
-  testPrint("calling r");
-  int xFound = x(tokens, index);
-  int rFound = 0;
-  if(xFound==1) {
-
-    
-    if (tokens[*index] == ';') {
-      *index = *index+1;
-      rFound = r(tokens, index);
-    }
-  }
-  if(xFound != -1 && rFound != -1){
-    return 1;
-  }
-  return -1;
-}
-~~~
-<!-- Include screenshot showing prime partitions of 42 -->
-Below is a screenshot of the program parsing the test file.  
-![Screenshot of C parser](./recursiveDescentParserC/parserC.png width=600px)
-
-
-ANTLR Java parser
---------------------------------
-
-<!-- Details, source code, and screenshots here -->
-I did this one last since I could not get antlr running on my machine for the longest time, but it was probably the easiest since I mostly just verbatim put the grammar from the assignment into the grammar file. I also pretty much just used the test file from the slideshow to run it, with some extra features to throw exceptions to be caught. Important files should be below
-
-The grammar file (antlrJava/src/Scripture.g4):
-~~~
-grammar Scripture;
-
-prog        : stat (NEWLINE stat)* EOF;
-
-stat        : b r t;
-
-b           : o n
-            |n;
-
-o           : D;
-
-n           : N ;
-
-r           : x
-            | x';'r
-            |;
-
-x           : c
-            | c':'v;
-
-v           : l
-            | l','v;
-l           : d
-            | d'-'d;
-
-t           : '('N')'
-            |;
-
-c           : d ;
-
-d           : D
-            | D d;
-
-D           : [0-9];
-
-N           : [A-Za-z]+;
-
-
-
-NEWLINE : '\r'? '\n' ;
-WS      : [ \t]+ -> skip ;
+Reminder "Hello World" Now stdout
 ~~~
 
-The main/runnable file (./antlrJava/gen/Test.java):
+The language will accept these inputs to populate a calendar
 ~~~
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
+Class 16:00 to 18:00
+Class 1600 to 1800
+Class 1600 - 1800
+Class 4:00 pm - 6 pm
+Class "CS" 16:00 to 18:00
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+Meeting "Project 19:00 to 21:00
+Invite "Lee" to "Project"
+Repeat "CS" Weekly ## or Biweekly, Annually, etc
+Repeat "CS" Weekly on Tuesday and Thursday
+Repeat "CS" Weekly on Tues and Thurs
 
-import java.util.Scanner;
-
-public class Test {
-    public static void main(String[] args) throws Exception {
-        //BufferedReader fileStream = new BufferedReader(new FileReader("inputs/test.txt"));
-
-        //Enable this snippet to read the next line and open that file
-        //Scanner scanner = new Scanner(System.in);
-        //String line = scanner.nextLine();
-        //BufferedReader fileStream = new BufferedReader(new FileReader(line));
-
-
-        //Alternatively, read from args (May cause errors, no safeguards
-        BufferedReader fileStream = new BufferedReader(new FileReader(args[0]));
-
-
-        String l;
-        while ((l = fileStream.readLine()) != null) {
-            CharStream input = CharStreams.fromString(l);
-
-            //Exception stuff taken from: https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
-            ScriptureLexer lexer = new ScriptureLexer(input);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            ScriptureParser parser = new ScriptureParser(tokens);
-            parser.removeErrorListeners();
-            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-            try {
-                parser.prog(); // parse the input stream!
-                System.out.println("PASS:" + l);
-            }
-            catch(ParseCancellationException e) {
-                System.out.println("FAIL:" + l);
-            }
-        }
-
-
-    };
-}
+Extend "CS" on August 2 1 hour
+Extend "CS" on Aug 2 1 hour
+Extend First "CS" 1 hour
+Cancel "Project" on July 8
 ~~~
 
-The custom error listener (./antlrJava/gen/ThrowingErrorListener.java)
+The output for this would be the events being rendered in the gui component.
+
+The language will not accept these inputs:
 ~~~
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-
-public class ThrowingErrorListener extends BaseErrorListener {
-
-    public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
-
-
-    @Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
-             throws ParseCancellationException {
-            throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
-    }
-}
-
+Class "Arabic" 19:00 to 25:00 ## Time out of range
+Extend "DNE" on August 2 1 hour ## Reference to event not initialized
+Meeting Party "thing" ## Two keywords used, invalid
+Extend Tenth "Study Session" on July 1 1 hour 
 ~~~
-<!-- Include screenshot showing prime partitions of 42 -->
-Below is a screenshot of the program parsing the test file, using the first method to read from the file (hard coded).
-![Screenshot of Java with antler parsing the test file](./antlrJava/antlrJava.png width=600px)
+
+Functionality
+================
+We will have a GUI component to display the created calendar as well as create a JSON or other format for storing the data on the calendar. 
 
 
-Perl Regex
---------------------------------
-<!-- Details, source code, and screenshots here -->
-This was the second method I completed. After a while of trying to use grouping and such to parse it correctly, I ended up kind of brute forcing it, so the regular expression to me looks totally unreadable since there are massive chunks that have been copied and pasted for the r and v rules. I also did it in OneCompiler since I have not downloaded a way to compile perl on my machine, so it might not read correctly from the arguments.
-
-~~~
-# Reads from stdin since I did it in OneCompiler
-$str = <STDIN>;
-
-# I don't have a perl compiler on my machine (I think)
-# But enable this snippet to read from the first argument instead
-# I think it should work?
-
-# $str = $ARGV[0];
-# while (<$str>) {
-
-# STDIN is copy-pasted from the test file
-while(<STDIN>){
-  if ($_ =~ m/^\h*(\h*\d{1}\h*[A-Za-z]++|[A-Za-z]++)\h*(((\d++|\d++:((\d++|\d++-\d++)|(\d++,|\d++-\d++,)*(\d++|\d++-\d++)))|(\d++|\d++:((\d++|\d++-\d++)|(\d++,|\d++-\d++,)*(\d++|\d++-\d++)));)*|)\h*(\([A-Za-z]++\))?\h*$/){
-  print "PASS: $_";
-}
-else {
-  print "FAIL: $_"
-}
-}
-~~~
-<!-- Include screenshot showing prime partitions of 42 -->
-Screenshot of the perl regex parsing the test file. 
-![Perl screenshot](./perlRegex/perlRegex.png width=600px)
-
-
-Assignment Reflection
-======================
-
-<!-- Note: wrapping table in div.noheader will hide the table's header -->
-<!-- Note: wrapping table in div.firstcol will style the first column different from other columns -->
-<div >
-Language                        |     Difficulty | Time
-------------------------|-----
-C                     | Easy (when not stubborn) | ~8 hrs
-Java+Antlr            | Easy | ~2.5 hrs
-Perl          | Easy-Intermediate | ~2 hrs
-</div>
-
-From easiest to hardest, I would put ANTLR -> C -> Regex. They were all really not too bad, I just got caught up on stupid things like installing the tool or stubbornly pushing ahead with a really hard implementation. I put regex as the hardest because even after completing it it really just looks like a magic spell or something, and antlr because it is the most intuitive. 
-
-Knowing what I know, I would probably just use ANTLR for solving some problem like this since it is a tool really designed for doing exactly this, but if it was any easier I would probably try to do it in Regex and if there were performance constraints I would try to do it in C. 
-
-<!--
-How do the languages compare to one another?
-Which language was your favorite?  Which was your least favorite?
-What type of problems would each language be good at solving?
-When you had a choice of language, why did you decide on the language in which you implemented your solution?
-If you worked with a partnor, how did you decide to split up the work?
-
-List any other comments below.
-Feel free to provide any feedback on how much you learned from doing the assignment, and whether you enjoyed doing it.
--->
-
-
-
-
-
+Meeting & Approval dates
+================
+We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
 
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
