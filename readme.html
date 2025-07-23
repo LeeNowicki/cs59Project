@@ -65,11 +65,115 @@ Functionality
 ================
 We will have a GUI component to display the created calendar as well as create a JSON or other format for storing the data on the calendar. 
 
+P01 - Grammar
+================
+We wrote a grammar (in the ANTLR style) that we believe will be able to parse the inputs
+we defined earlier, with some exceptions. 
+
+Rather than immediately dealing with certain complicated RegExs we decided to add these as
+stretch goals for later on in our language. Some of these goals include:
+- Identifying dates of form 1/24/23
+- Increasing the ways to write out weekdays and months
+- Dealing with leap years
+- Accepting non military (am/pm) times
+- Operating on the "First" or "Second" etc. event with a certain "name"
+
+~~~~
+grammar Calendar;
+
+start : line (line)* EOF;
+
+line: keyword '\n'; 
+
+keyword: action 
+        | event ;
+
+action: 'Invite' NAME ('to')? event (file)?
+        | 'Repeat' NAME frequency 
+        | 'Extend' NAME date duration
+        | 'Cancel' NAME (date)?
+        | 'Reminder' NAME (date| date time| time) (file)?
+        |
+        ;
+
+event: ID (NAME)? time (date)? ;
+
+frequency: 'Every' weekday ('and' weekday)*
+        |'Biweekly' (weekday)? ('and' weekday)*
+        |'Annually'
+        |'Weekly' (weekday)? ('and' weekday)*
+        |'Monthly'
+        //etc
+        ;
+weekday: 'Mon'
+    | 'Tues'
+    |'Wed' | 'Wednesday'
+    |'Thurs'
+    |'Fri'
+    |'Sat'
+    |'Sun';
+
+file: 'stdout'; //add others
+
+duration: (INT ('hours'|'min'|'sec'))+;
+
+time: TIME
+    | TIME 'to' TIME
+    |TIME '-' TIME;
+
+
+date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') THIRTYONE
+    | ('Apr'|'Jun'|'Sep'|'Nov') THIRTY
+    | 'Feb' TWENTYEIGHT
+    |NUMERICDATE;
+
+
+
+NAME :'"'.*'"' ;//Matches double quoted string
+
+ID : [A-Za-z]([A-Za-z0-9])*;
+
+INT: [0-9]([0-9])*;
+        
+THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
+
+THIRTY: ([1-9]|[1-2][0-9]|'30');
+
+TWENTYNINE: ([1-9]|[1-2][0-9]);
+
+TWENTYEIGHT: ([1-9]|[1-2][0-8]);
+
+TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
+
+NUMERICDATE: ; //We'll do that later
+~~~~
+
+This grammar should fail to parse all of our given bad inputs as they don't match out patterns.
+It will match the inputs of:
+
+Class 1600 to 1800
+Class 1600 - 1800
+
+along with something along the lines of:
+
+Class "CS" 2000 - 2200
+
+where a string identifier is included.
+We also support repeats, but with slightly different syntax of: 
+Repeat "CS" Weekly
+Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
+Repeat "CS" Annually
+
+Other supported inputs are:
+Extend "CS" Aug 2 1 hour
+Extend "CS" Aug 2 2 hour
+Cancel "Project" July 8
+
 
 Meeting & Approval dates
 ================
 We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
-
+We met on 7/23/2025 to begin writing a real grammar structure
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
