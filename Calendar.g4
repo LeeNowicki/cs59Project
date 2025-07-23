@@ -52,7 +52,7 @@ NAME :'"'.*'"' ;//Matches double quoted string
 
 ID : [A-Za-z]([A-Za-z0-9])*;
 
-INT: [0-9]([0-9])*;
+TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
         
 THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
 
@@ -62,6 +62,6 @@ TWENTYNINE: ([1-9]|[1-2][0-9]);
 
 TWENTYEIGHT: ([1-9]|[1-2][0-8]);
 
-TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
+NUMERICDATE: 'dsfgioadfsljk'; //We'll do that later
 
-NUMERICDATE: ; //We'll do that later
+INT: [0-9]([0-9])*;
