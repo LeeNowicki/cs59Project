@@ -148,7 +148,6 @@ TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
 NUMERICDATE: ; //We'll do that later
 ~~~~
 
-This grammar should fail to parse all of our given bad inputs as they don't match out patterns.
 It will match the inputs of:
 
 Class 1600 to 1800
@@ -168,6 +167,22 @@ Other supported inputs are:
 Extend "CS" Aug 2 1 hour
 Extend "CS" Aug 2 2 hour
 Cancel "Project" July 8
+
+This grammar should fail to parse all of our given bad inputs as they don't match out patterns.
+For the earlier examples:
+
+Class "Arabic" 19:00 to 25:00 ## Time out of range - 25 will not match the '2'[0-3] part of TIME
+Extend "DNE" on August 2 1 hour ## Reference to event not initialized - this would be implemented when functionality is added
+Meeting Party "thing" ## Two keywords used, invalid  - only one keyword per line 
+Extend Tenth "Study Session" on July 1 1 hour - this would also be invalid when functionality is added, if there is no tenth study session on that date
+
+As some additional examples, currently the grammar will not match:
+
+1600 - 2000 "CS Class" ## A line must start with a keyword, and a time cannot be parsed as a keyword
+Repeat "CS Class" ## No frequency given
+Class "CS Class" 1600-2000 August 32 ## 32 will not match THIRTYONE
+
+
 
 
 Meeting & Approval dates
