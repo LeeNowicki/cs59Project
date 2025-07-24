@@ -1,7 +1,7 @@
-**A01 - Language Recognition**
+**CS59 Project**
 
 
-Author
+Authors
 =============
 
 <!-- Note: wrapping table in div.noheader will hide the table's header -->
@@ -13,17 +13,19 @@ Group Members              | Aleksander Nowicki, Jacob Bacus, Henry Stauch
 </div>
 
 
+P00 - Introduction
+================
 
 Domain
-================
+----------------
 Scheduling and calendar creation. 
 
 Problem
-================
+----------------
 It is hard to create and populate a personal calendar, as well as share it with other people.
 
 Valid Inputs
-================
+----------------
 The language will have default keywords and classes built in to the language, with the user having the ability to extend them as necessary. These start with a capital letter, and each line must start with one of them.
 
 The following would be hello world in our language (using the Reminder keyword)
@@ -62,7 +64,7 @@ Extend Tenth "Study Session" on July 1 1 hour
 ~~~
 
 Functionality
-================
+----------------
 We will have a GUI component to display the created calendar as well as create a JSON or other format for storing the data on the calendar. 
 
 P01 - Grammar
@@ -119,7 +121,8 @@ duration: (INT ('hours'|'min'|'sec'))+;
 
 time: TIME
     | TIME 'to' TIME
-    |TIME '-' TIME;
+    |TIME '-' TIME
+    |'now';
 
 
 date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') THIRTYONE
@@ -151,6 +154,7 @@ NUMERICDATE: ; //We'll do that later
 It will match the inputs of:
 
 Class 1600 to 1800
+
 Class 1600 - 1800
 
 along with something along the lines of:
@@ -158,28 +162,41 @@ along with something along the lines of:
 Class "CS" 2000 - 2200
 
 where a string identifier is included.
+
 We also support repeats, but with slightly different syntax of: 
+
 Repeat "CS" Weekly
+
 Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
+
 Repeat "CS" Annually
 
 Other supported inputs are:
+
 Extend "CS" Aug 2 1 hour
+
 Extend "CS" Aug 2 2 hour
+
 Cancel "Project" July 8
 
-This grammar should fail to parse all of our given bad inputs as they don't match out patterns.
+This grammar should fail to parse all of our given bad inputs as they don't match our patterns.
+
 For the earlier examples:
 
 Class "Arabic" 19:00 to 25:00 ## Time out of range - 25 will not match the '2'[0-3] part of TIME
+
 Extend "DNE" on August 2 1 hour ## Reference to event not initialized - this would be implemented when functionality is added
+
 Meeting Party "thing" ## Two keywords used, invalid  - only one keyword per line 
+
 Extend Tenth "Study Session" on July 1 1 hour - this would also be invalid when functionality is added, if there is no tenth study session on that date
 
 As some additional examples, currently the grammar will not match:
 
 1600 - 2000 "CS Class" ## A line must start with a keyword, and a time cannot be parsed as a keyword
+
 Repeat "CS Class" ## No frequency given
+
 Class "CS Class" 1600-2000 August 32 ## 32 will not match THIRTYONE
 
 
