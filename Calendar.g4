@@ -1,17 +1,17 @@
 grammar Calendar;
 
-start : line (line)* EOF;
+start : line (line)*;
 
-line: keyword '\n'; 
+line: keyword '\n';
 
 keyword: action 
         | event ;
 
-action: 'Invite' NAME ('to')? event (file)?
+action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
         | 'Repeat' NAME frequency 
         | 'Extend' NAME date duration
         | 'Cancel' NAME (date)?
-        | 'Reminder' NAME (date| date time| time) (file)?
+        | 'Reminder' NAME (date| date TIME| TIME) (file)?
         |
         ;
 
@@ -24,13 +24,13 @@ frequency: 'Every' weekday ('and' weekday)*
         |'Monthly'
         //etc
         ;
-weekday: 'Mon'
-    | 'Tues'
+weekday: 'Mon' | 'Monday'
+    | 'Tues' | 'Tuesday'
     |'Wed' | 'Wednesday'
-    |'Thurs'
-    |'Fri'
-    |'Sat'
-    |'Sun';
+    |'Thurs' | 'Thursday'
+    |'Fri' | 'Friday'
+    |'Sat' | 'Saturday'
+    |'Sun' | 'Sunday';
 
 file: 'stdout'; //add others
 
@@ -41,27 +41,32 @@ time: TIME
     |TIME '-' TIME;
 
 
-date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') THIRTYONE
-    | ('Apr'|'Jun'|'Sep'|'Nov') THIRTY
-    | 'Feb' TWENTYEIGHT
+date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (INT)?
+    | ('Apr'|'Jun'|'Sep'|'Nov') (THIRTY|TWENTYEIGHT|TWENTYNINE) (INT)?
+    | 'Feb' TWENTYEIGHT (INT)?
+//    | ('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) NUMERICYEAR
+//    | ('4/'|'6/'|'9/'|'11/') (THIRTY|TWENTYEIGHT|TWENTYNINE) NUMERICYEAR
+//    | '2/' TWENTYEIGHT NUMERICYEAR;
     |NUMERICDATE;
 
 
-
-NAME :'"'.*'"' ;//Matches double quoted string
+NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
 
 ID : [A-Za-z]([A-Za-z0-9])*;
 
-TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
-        
-THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
-
-THIRTY: ([1-9]|[1-2][0-9]|'30');
-
-TWENTYNINE: ([1-9]|[1-2][0-9]);
+TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
+//|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
 
 TWENTYEIGHT: ([1-9]|[1-2][0-8]);
 
-NUMERICDATE: 'dsfgioadfsljk'; //We'll do that later
+TWENTYNINE: ([1-9]|[1-2][0-9]);
+
+THIRTY: ([1-9]|[1-2][0-9]|'30');
+        
+THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
+
+NUMERICDATE: ((('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/')[1-9]|[1-2][0-9]|'3'[0-1])|(('4/'|'6/'|'9/'|'11/')[1-9]|[1-2][0-9]|'30')|(('2/')[1-9]|[1-2][0-8]))('/'[0-9][0-9][0-9][0-9]);
 
 INT: [0-9]([0-9])*;
+
+WS: [ \t\r] -> skip;
