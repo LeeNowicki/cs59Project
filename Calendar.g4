@@ -34,25 +34,26 @@ weekday: 'Mon' | 'Monday'
 
 file: 'stdout'; //add others
 
-duration: (INT ('hours'|'min'|'sec'))+;
+duration: (num ('hours'|'min'|'sec'))+;
 
 time: TIME
     | TIME 'to' TIME
     |TIME '-' TIME;
 
 
-date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (INT)?
-    | ('Apr'|'Jun'|'Sep'|'Nov') (THIRTY|TWENTYEIGHT|TWENTYNINE) (INT)?
-    | 'Feb' TWENTYEIGHT (INT)?
+date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec'|'January'|'March'|'May'|'July'|'August'|'October'|'December') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (num)?
+    | ('Apr'|'Jun'|'Sep'|'Nov'|'April'|'June'|'Sepember'|'November') (THIRTY|TWENTYEIGHT|TWENTYNINE) (num)?
+    | ('Feb'|'February') TWENTYEIGHT (num)?
 //    | ('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) NUMERICYEAR
 //    | ('4/'|'6/'|'9/'|'11/') (THIRTY|TWENTYEIGHT|TWENTYNINE) NUMERICYEAR
 //    | '2/' TWENTYEIGHT NUMERICYEAR;
-    |NUMERICDATE;
+    | NUMERICDATE;
 
+num: INT | TWENTYNINE | TWENTYEIGHT | THIRTY | THIRTYONE;
 
 NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
 
-ID : [A-Za-z]([A-Za-z0-9])*;
+ID: [A-Za-z]([A-Za-z0-9])*;
 
 TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
 //|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
