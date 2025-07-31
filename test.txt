@@ -21,6 +21,6 @@ Appointment 04:00 May 6
 Class "Arabic" 19:00 to 25:00
 Extend "DNE" on August 2 1 hour
 Meeting Party "thing"
-1600 - 2000 "CS Class"
+16:00 - 20:00 "CS Class"
 Repeat "CS Class"
-Class "CS Class" 1600-2000 August 32
+Class "CS Class" 16:00-20:00 August 32
