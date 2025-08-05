@@ -37,6 +37,10 @@ public class ParserDriver {
             parser.removeErrorListeners();
             parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
+            EventJsonListener eventListener = new EventJsonListener();
+            parser.removeParseListeners();
+            parser.addParseListener(eventListener);
+
             try {
                 parser.line();
 
