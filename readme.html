@@ -200,12 +200,228 @@ Repeat "CS Class" ## No frequency given
 Class "CS Class" 1600-2000 August 32 ## 32 will not match THIRTYONE
 
 
+P02 - Parser
+===============
 
+Since we wrote our original grammar as an ANTLR file, we simply needed to generate our parser and verify our inputs.
+
+Testing our inputs revealed that our grammar had several flaws which needed to be corrected.
+
+- ANTLR was recognizing any date 1-28 as the TWENTYEIGHT terminal. We had written each month to only except the terminal corresponding to the number of days in that month. To fix this, we allowed all months to accept all terminals <= their number of days
+
+- For our extend functionality to work, we needed to accept an INT terminal which we defined as any non-negative number. This became an issue when we realized times without colons would be processed as ints. For now, we only accept times in the 4 digit with colon format with a stretch goal to broaden this acceptance.
+
+- We shifted the priority of terminals so that INT was recognized last and lower terminals like TWENTYEIGHT were recognized first.
+
+- We altered the way we identified our quoted text so that the text was not grouped into the largest possible set of quotes in the input.
+
+- We added different options for weekdays and months that were the full words.
+
+- We added a terminal NUMERICDATE which accepts dates in the form month/day/year using a regex.
+
+After doing this, we revised our test file to include valid and invalid inputs and wrote a driver which is shown running these inputs below.
+
+![Screenshot of test inputs running on driver](./ParserTest1.png width=600px)
+
+
+---------
+
+Our inputs:
+
+~~~~
+Appointment "Dentist" 08:00-09:00 5/5/1914
+Extend "Dentist" 5/5/1914 1000 min
+Cancel "Dentist" May 5 1914
+Reminder "Hello World" May 5 1914 05:00
+Sport "Soccer Practice" 18:01-18:03 Jun 30 333333333
+Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
+Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
+Repeat "Dentist" Monthly
+Invite "Jacob" to "Dentist" on 5/5/1914 stdout
+Class 16:00 to 18:00
+Class 16:00 - 18:00
+Class "CS" 20:00 - 22:00
+Repeat "CS" Weekly
+Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
+Repeat "CS" Annually
+Extend "CS" Aug 2 31 hours
+Extend "CS" Aug 2 32 hours
+Cancel "Project" July 8
+Appointment 04:00 May 6
+
+Class "Arabic" 19:00 to 25:00  ## Fails due to invalid time
+Extend "DNE" on August 2 1 hour  ## Fails due to invalid extension keyword
+Meeting Party "thing"  ## Fails due to use of 2 keywork classifications for event
+16:00 - 20:00 "CS Class"  ## Fails due to invalid format of no keyword and time before title
+Repeat "CS Class"  ## Fails due to lack of frequency
+Class "CS Class" 16:00-20:00 August 32  ## Fails due to invalid date
+
+~~~~
+
+---------
+
+Out updated grammar:
+
+~~~~
+grammar Calendar;
+
+start : line (line)*;
+
+line: keyword '\n';
+
+keyword: action
+| event ;
+
+action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
+| 'Repeat' NAME frequency
+| 'Extend' NAME date duration
+| 'Cancel' NAME (date)?
+| 'Reminder' NAME (date| date TIME| TIME) (file)?
+|
+;
+
+event: ID (NAME)? time (date)? ;
+
+frequency: 'Every' weekday ('and' weekday)*
+|'Biweekly' (weekday)? ('and' weekday)*
+|'Annually'
+|'Weekly' (weekday)? ('and' weekday)*
+|'Monthly'
+//etc
+;
+weekday: 'Mon' | 'Monday'
+| 'Tues' | 'Tuesday'
+|'Wed' | 'Wednesday'
+|'Thurs' | 'Thursday'
+|'Fri' | 'Friday'
+|'Sat' | 'Saturday'
+|'Sun' | 'Sunday';
+
+file: 'stdout'; //add others
+
+duration: (num ('hours'|'min'|'sec'))+;
+
+time: TIME
+| TIME 'to' TIME
+|TIME '-' TIME;
+
+
+date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec'|'January'|'March'|'May'|'July'|'August'|'October'|'December') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (num)?
+| ('Apr'|'Jun'|'Sep'|'Nov'|'April'|'June'|'Sepember'|'November') (THIRTY|TWENTYEIGHT|TWENTYNINE) (num)?
+| ('Feb'|'February') TWENTYEIGHT (num)?
+//    | ('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) NUMERICYEAR
+//    | ('4/'|'6/'|'9/'|'11/') (THIRTY|TWENTYEIGHT|TWENTYNINE) NUMERICYEAR
+//    | '2/' TWENTYEIGHT NUMERICYEAR;
+| NUMERICDATE;
+
+num: INT | TWENTYNINE | TWENTYEIGHT | THIRTY | THIRTYONE;
+
+NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
+
+ID: [A-Za-z]([A-Za-z0-9])*;
+
+TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
+//|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
+
+TWENTYEIGHT: ([1-9]|[1-2][0-8]);
+
+TWENTYNINE: ([1-9]|[1-2][0-9]);
+
+THIRTY: ([1-9]|[1-2][0-9]|'30');
+
+THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
+
+NUMERICDATE: ((('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/')[1-9]|[1-2][0-9]|'3'[0-1])|(('4/'|'6/'|'9/'|'11/')[1-9]|[1-2][0-9]|'30')|(('2/')[1-9]|[1-2][0-8]))('/'[0-9][0-9][0-9][0-9]);
+
+INT: [0-9]([0-9])*;
+
+WS: [ \t\r] -> skip;
+~~~~
+
+-----------
+
+Our driver and error listener:
+
+~~~~
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+public class ParserDriver {
+public static void main(String[] args) throws Exception {
+//BufferedReader fileStream = new BufferedReader(new FileReader("test.txt"));
+
+//Enable this snippet to read the next line and open that file
+//Scanner scanner = new Scanner(System.in);
+//String line = scanner.nextLine();
+//BufferedReader fileStream = new BufferedReader(new FileReader(line));
+
+
+//Alternatively, read from args (May cause errors, no safeguards
+BufferedReader fileStream = new BufferedReader(new FileReader(args[0]));
+
+String l ;
+while((l = fileStream.readLine()) != null){
+l+= "\n"; //add back the newline - it matters for the parser
+
+CharStream input = CharStreams.fromString(l);
+
+//Exception stuff taken from: https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
+CalendarLexer lexer = new CalendarLexer(input);
+lexer.removeErrorListeners();
+lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+CommonTokenStream tokens = new CommonTokenStream(lexer);
+CalendarParser parser = new CalendarParser(tokens);
+parser.removeErrorListeners();
+parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+try {
+parser.line();
+
+System.out.print("PASS: " + l);
+
+}
+catch(ParseCancellationException e) {
+System.out.print("FAIL: " + l);
+}
+}
+
+
+};
+}
+~~~~
+
+~~~~
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+
+public class ThrowingErrorListener extends BaseErrorListener {
+
+public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
+
+
+@Override
+public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
+throws ParseCancellationException {
+throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
+}
+}
+~~~~
 
 Meeting & Approval dates
 ================
 We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
 We met on 7/23/2025 to begin writing a real grammar structure
+We met on 7/30/2025 to generate our Parser and update our grammar
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
