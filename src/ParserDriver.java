@@ -1,9 +1,12 @@
+import netscape.javascript.JSObject;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.json.*;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,10 +45,10 @@ public class ParserDriver {
             parser.addParseListener(eventListener);
 
             try {
+                JSONHandler.restart();
                 parser.start();
 
-                System.out.print("PASS: " + l);
-
+                System.out.println(JSONHandler);
             }
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);
