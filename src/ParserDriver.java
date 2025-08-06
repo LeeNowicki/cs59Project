@@ -45,7 +45,7 @@ public class ParserDriver {
             parser.addParseListener(eventListener);
 
             try {
-                JSONHandler.clearThisObject();
+                JSONHandler.createThisObject();
                 parser.start();
 
             }
