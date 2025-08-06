@@ -48,6 +48,8 @@ public class ParserDriver {
                 JSONHandler.createThisObject();
                 parser.start();
 
+
+                JSONHandler.printAll();
             }
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);

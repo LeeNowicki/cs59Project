@@ -3,6 +3,8 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.Date;
+
 
 public class EventJsonListener implements CalendarListener {
 
@@ -38,8 +40,20 @@ public class EventJsonListener implements CalendarListener {
         if (!ctx.isEmpty()) {
             ParseTree actionType = ctx.getChild(0);
             String actionText = actionType.getText();
-            if (actionText.equals("Cancel")) {
-
+            if (actionText.equals("Cancel")) { // if action word is "cancel"
+                ParseTree eventName = ctx.getChild(1);
+                String eventString = eventName.getText();
+                if (ctx.date() != null) { // if a date is included
+                    Date date;
+                    if (ctx.date().NUMERICDATE() != null) { // if the date is in numeric format
+                        date = DateHandler.getFromNumericDate(ctx.date().getText());
+                    } else {
+                        date = DateHandler.getFromDate(ctx.date().getText());
+                    }
+                    JSONHandler.cancel(eventString, date); // remove event from hashset
+                } else { // if no date was included
+                    JSONHandler.cancel(eventString);
+                }
             }
         }
     }
