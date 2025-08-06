@@ -2,7 +2,7 @@ import org.json.*;
 
 import java.util.Date;
 import java.util.HashMap;
-
+// TODO: Write other handlers for reminders and invites and have them also get zipped up
 public class JSONHandler {
     private static String objectName = new String();
     private static JSONObject singleObject = new JSONObject();
@@ -47,6 +47,14 @@ public class JSONHandler {
 
     public static void addToMap() {
         allObjects.put(objectName, singleObject);
+    }
+
+    // TODO: fill out the functions
+    public static void cancel(String eventName, Date date){
+
+    }
+    public static void cancel(String eventName){
+
     }
 
     public static JSONObject getObject(String objectName) {
