@@ -51,10 +51,27 @@ public class JSONHandler {
 
     // TODO: fill out the functions
     public static void cancel(String eventName, Date date){
+        JSONObject toCancel = allObjects.get(eventName);
+        if(toCancel != null){
+            int index = 0;
+            JSONArray dates = toCancel.getJSONArray("Start_Times");
+            while(index < dates.length()){
+                Date dateToCancel = (Date)dates.get(index);
+                if(date.getDate() == dateToCancel.getDate()
+                        && date.getMonth() == dateToCancel.getMonth()
+                        && date.getYear() == dateToCancel.getYear()){
+                    dates.remove(index);
+                }
+                else {
+                    index++;
+                }
+            }
 
+        }
+        return;
     }
     public static void cancel(String eventName){
-
+        allObjects.remove(eventName);
     }
 
     public static JSONObject getObject(String objectName) {
