@@ -51,6 +51,10 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterEvent(CalendarParser.EventContext ctx) {
+        // TODO:
+        // Start_Times and End_Times are intialized with the object
+        // IF IT ALREADY EXISTS (lee will make command to check)
+        // Then .getJSONArray("Start_TImes").put(date);
         if (ctx.TYPE() != null) {
             JSONHandler.put("Type", ctx.TYPE().toString());
         }

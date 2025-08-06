@@ -45,10 +45,9 @@ public class ParserDriver {
             parser.addParseListener(eventListener);
 
             try {
-                JSONHandler.restart();
+                JSONHandler.clearThisObject();
                 parser.start();
 
-                System.out.println(JSONHandler);
             }
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);
