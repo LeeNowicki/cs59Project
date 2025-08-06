@@ -1,22 +1,17 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 
 public class EventJsonListener implements CalendarListener {
 
-    private StringBuilder sb;
-
     @Override
     public void enterStart(CalendarParser.StartContext ctx) {
-        sb = new StringBuilder();
-        sb.append("{\n\t{ ");
     }
 
     @Override
     public void exitStart(CalendarParser.StartContext ctx) {
-        sb.append(" }\n}");
-        System.out.println(sb.toString());
     }
 
     @Override
@@ -31,7 +26,6 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterKeyword(CalendarParser.KeywordContext ctx) {
-
     }
 
     @Override
@@ -41,7 +35,13 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterAction(CalendarParser.ActionContext ctx) {
+        if (!ctx.isEmpty()) {
+            ParseTree actionType = ctx.getChild(0);
+            String actionText = actionType.getText();
+            if (actionText.equals("Cancel")) {
 
+            }
+        }
     }
 
     @Override
@@ -51,16 +51,17 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterEvent(CalendarParser.EventContext ctx) {
-
+        if (ctx.TYPE() != null) {
+            JSONHandler.put("Type", ctx.TYPE().toString());
+        }
+        if (ctx.NAME() != null) {
+            JSONHandler.put("Name", ctx.NAME().toString());
+        }
+        if (ctx.time() != null) {
+        }
     }
 
     @Override public void exitEvent(CalendarParser.EventContext ctx) {
-        if (ctx.NAME() != null) {
-            sb.append("NAME: ");
-            sb.append("\t{");
-            sb.append(ctx.NAME().getText());
-            sb.append("}");
-        }
     }
 
     @Override

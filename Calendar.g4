@@ -15,7 +15,7 @@ action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
         |
         ;
 
-event: ID (NAME)? time (date)? ;
+event: TYPE NAME time (date)? ;
 
 frequency: 'Every' weekday ('and' weekday)*
         |'Biweekly' (weekday)? ('and' weekday)*
@@ -53,7 +53,7 @@ num: INT | TWENTYNINE | TWENTYEIGHT | THIRTY | THIRTYONE;
 
 NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
 
-ID: [A-Za-z]([A-Za-z0-9])*;
+TYPE: [A-Za-z]([A-Za-z0-9])*;
 
 TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
 //|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
