@@ -42,7 +42,7 @@ public class ParserDriver {
             parser.addParseListener(eventListener);
 
             try {
-                parser.line();
+                parser.start();
 
                 System.out.print("PASS: " + l);
 
