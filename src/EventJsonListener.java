@@ -54,6 +54,23 @@ public class EventJsonListener implements CalendarListener {
                 } else { // if no date was included
                     JSONHandler.cancel(eventString);
                 }
+            } else if (actionText.equals("Reminder")) {
+                String reminderString = ctx.NAME().toString();
+                Date date;
+                if (ctx.date() != null && ctx.TIME() != null) {
+                    date = DateHandler.getFromDate(ctx.date().getText(), ctx.TIME().getText());
+                } else if (ctx.date() != null) {
+                    date = DateHandler.getFromDate(ctx.date().getText());
+                } else {
+                    date = DateHandler.getTimeNoDate(ctx.TIME().getText());
+                }
+                ReminderHandler.put(reminderString, date);
+            } else if (actionText.equals("Extend")) {
+
+            } else if (actionText.equals("Repeat")) {
+
+            } else if (actionText.equals("Invite")) {
+
             }
         }
     }
