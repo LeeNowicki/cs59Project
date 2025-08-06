@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 
@@ -31,7 +32,6 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterKeyword(CalendarParser.KeywordContext ctx) {
-
     }
 
     @Override
@@ -41,7 +41,13 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterAction(CalendarParser.ActionContext ctx) {
+        if (!ctx.isEmpty()) {
+            ParseTree actionType = ctx.getChild(0);
+            String actionText = actionType.getText();
+            if (actionText.equals("Cancel")) {
 
+            }
+        }
     }
 
     @Override
