@@ -64,7 +64,7 @@ public class EventJsonListener implements CalendarListener {
                 } else {
                     date = DateHandler.getTimeNoDate(ctx.TIME().getText());
                 }
-                ReminderHandler.put(reminderString, date);
+                ReminderHandler.createReminder(reminderString, date);
             } else if (actionText.equals("Extend")) {
 
             } else if (actionText.equals("Repeat")) {
