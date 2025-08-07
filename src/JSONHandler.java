@@ -15,6 +15,8 @@ public class JSONHandler {
 
         singleObject.put("Start_Times", new JSONArray());
         singleObject.put("End_Times", new JSONArray());
+
+        singleObject.put("RepeatDay", new JSONArray());
     }
 
     public static JSONObject getSingleObject() {

@@ -1,7 +1,9 @@
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -68,10 +70,40 @@ public class EventJsonListener implements CalendarListener {
             } else if (actionText.equals("Extend")) {
 
             } else if (actionText.equals("Repeat")) {
+                String eventName = ctx.NAME().toString();
+                JSONObject obj = JSONHandler.getObject(eventName);
+                if (obj == null) {
+                    throw new ParseCancellationException("Event " + eventName + " not found for Repeat");
+                }
+
+                CalendarParser.FrequencyContext f = ctx.frequency();
+                String word = f.getChild(0).getText();
+                obj.put("Repeat", word);
+
+                for (CalendarParser.WeekdayContext wc : f.weekday()) {
+                    int day = toDayIndex(wc.getText());
+                    obj.getJSONArray("RepeatDay").put(day);
+                }
+
+                JSONHandler.setSingleObject(obj);
+                JSONHandler.addToMap();
 
             } else if (actionText.equals("Invite")) {
 
             }
+        }
+    }
+
+    private static int toDayIndex(String txt) {
+        switch (txt.toLowerCase()) {
+            case "sun": case "sunday": return 0;
+            case "mon": case "monday": return 1;
+            case "tue": case "tuesday": return 2;
+            case "wed": case "wednesday": return 3;
+            case "thurs": case "thursday": return 4;
+            case "fri": case "friday": return 5;
+            case "sat": case "saturday": return 6;
+            default: return -1;
         }
     }
 
