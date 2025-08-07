@@ -13,6 +13,7 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterStart(CalendarParser.StartContext ctx) {
+        JSONHandler.createThisObject();
     }
 
     @Override
@@ -127,17 +128,77 @@ public class EventJsonListener implements CalendarListener {
         // Start_Times and End_Times are intialized with the object
         // IF IT ALREADY EXISTS (lee will make command to check)
         // Then .getJSONArray("Start_TImes").put(date);
-        if (ctx.TYPE() != null) {
-            JSONHandler.put("Type", ctx.TYPE().toString());
-        }
-        if (ctx.NAME() != null) {
-            JSONHandler.put("Name", ctx.NAME().toString());
-        }
-        if (ctx.time() != null) {
-        }
+//        if (ctx.TYPE() != null) {
+//            System.out.println("Type"+ctx.TYPE().toString());
+//            JSONHandler.put("Type", ctx.TYPE().toString());
+//        }
+//        if (ctx.NAME() != null) {
+//            JSONHandler.put("Name", ctx.NAME().toString());
+//            System.out.println("Name"+ctx.NAME().toString());
+//        }
+//        if (ctx.time() != null) {
+//        }
     }
 
     @Override public void exitEvent(CalendarParser.EventContext ctx) {
+
+        //Do name first - it is what existing events are referenced by
+        if (ctx.NAME() != null) {
+            //Check if it already exists, load it into the current object if so
+            if(JSONHandler.getObject(ctx.NAME().toString()) != null){
+                JSONHandler.setSingleObject(JSONHandler.getObject(ctx.NAME().toString()));
+            }
+            JSONHandler.put("Name", ctx.NAME().toString());
+            JSONHandler.setObjectName(ctx.NAME().toString());
+        }
+        if (ctx.TYPE() != null) {
+            JSONHandler.put("Type", ctx.TYPE().toString());
+        }
+        if(ctx.time().TIME(0) != null){
+            String timeString = ctx.time().TIME(0).toString();
+            String dateString = "";
+
+            Date startTime = null;
+            Date endTime = null;
+            //Case 1 - no date provided
+            if(ctx.date() == null) {
+                startTime = DateHandler.getTimeNoDate(timeString);
+
+                if (ctx.time().TIME(1) != null) {
+                    endTime = DateHandler.getTimeNoDate(ctx.time().TIME(1).toString());
+                }
+            }
+            //Case 2 - Numeric Date format
+            else if(ctx.date().NUMERICDATE() != null){
+                dateString = ctx.date().NUMERICDATE().toString();
+                startTime = DateHandler.getFromNumericDate(dateString,timeString);
+                if (ctx.time().TIME(1) != null) {
+                    endTime = DateHandler.getFromNumericDate(dateString, ctx.time().TIME(1).toString());
+                }
+            }
+            //Case 3 - Written format - everything else that matched date
+            else {
+                //dateString = ctx.date().getText(); // This does not work, as there are no delimiting spaces
+
+                //loop through the children, append to the string
+                for(int i = 0; i<ctx.date().getChildCount(); i++){
+                    dateString += ctx.date().getChild(i).getText() + " "; //add back the delimiting space
+                }
+                //System.out.println(dateString);
+                startTime = DateHandler.getFromDate(dateString, timeString);
+                if (ctx.time().TIME(1) != null) {
+                    endTime = DateHandler.getFromDate(dateString, ctx.time().TIME(1).toString());
+                }
+            }
+
+            if (endTime == null){
+                endTime = DateHandler.getDefaultEndTime(startTime);
+            }
+
+            JSONHandler.addStartTime(startTime);
+            JSONHandler.addEndTime(endTime);
+        }
+        JSONHandler.addToMap();
     }
 
     @Override

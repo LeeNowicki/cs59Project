@@ -45,7 +45,7 @@ public class ParserDriver {
             parser.addParseListener(eventListener);
 
             try {
-                JSONHandler.createThisObject();
+                //JSONHandler.createThisObject(); // now does this upon entering start instead
                 parser.start();
 
 
@@ -54,6 +54,7 @@ public class ParserDriver {
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);
             }
+            //catch(Exception e){System.out.println("Runtime error on line: " +l);System.out.println("Error details:" + e);}
         }
 
 

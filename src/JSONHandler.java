@@ -8,7 +8,7 @@ public class JSONHandler {
     private static JSONObject singleObject = new JSONObject();
     private static HashMap<String, JSONObject> allObjects = new HashMap<>();
 
-    // TODO: make functions: already exists in hashmap,
+    // TODO: make functions: alreadyexists in hashmap (redundant with get),
     public static void createThisObject() {
         singleObject = new JSONObject();
         objectName = new String();
@@ -63,6 +63,7 @@ public class JSONHandler {
                         && date.getMonth() == dateToCancel.getMonth()
                         && date.getYear() == dateToCancel.getYear()){
                     dates.remove(index);
+                    toCancel.getJSONArray("End_Times").remove(index);
                 }
                 else {
                     index++;
@@ -117,6 +118,6 @@ public class JSONHandler {
     }
 
     public static void printAll() {
-        System.out.println(makeObject());
+        System.out.println(makeObject().toString(4));
     }
 }
