@@ -40,6 +40,24 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void enterAction(CalendarParser.ActionContext ctx) {
+
+    }
+
+    private static int toDayIndex(String txt) {
+        switch (txt.toLowerCase()) {
+            case "sun": case "sunday": return 0;
+            case "mon": case "monday": return 1;
+            case "tue": case "tuesday": return 2;
+            case "wed": case "wednesday": return 3;
+            case "thurs": case "thursday": return 4;
+            case "fri": case "friday": return 5;
+            case "sat": case "saturday": return 6;
+            default: return -1;
+        }
+    }
+
+    @Override
+    public void exitAction(CalendarParser.ActionContext ctx) {
         if (!ctx.isEmpty()) {
             ParseTree actionType = ctx.getChild(0);
             String actionText = actionType.getText();
@@ -101,24 +119,6 @@ public class EventJsonListener implements CalendarListener {
                 JSONHandler.invite(invitee, eventName, date);
             }
         }
-    }
-
-    private static int toDayIndex(String txt) {
-        switch (txt.toLowerCase()) {
-            case "sun": case "sunday": return 0;
-            case "mon": case "monday": return 1;
-            case "tue": case "tuesday": return 2;
-            case "wed": case "wednesday": return 3;
-            case "thurs": case "thursday": return 4;
-            case "fri": case "friday": return 5;
-            case "sat": case "saturday": return 6;
-            default: return -1;
-        }
-    }
-
-    @Override
-    public void exitAction(CalendarParser.ActionContext ctx) {
-
     }
 
     @Override
