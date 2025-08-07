@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.io.File;
 import java.util.Date;
 
 
@@ -69,8 +70,20 @@ public class EventJsonListener implements CalendarListener {
 
             } else if (actionText.equals("Repeat")) {
 
-            } else if (actionText.equals("Invite")) {
-
+            } else if (actionText.equals("Invite")) { // Grammar: 'Invite' NAME ('to')? NAME ('on')? date (file)?
+                String invitee = ctx.getChild(1).getText();
+                String eventName;
+                Date date;
+                if (ctx.getChild(2).getText().equals("to")) { // if there is a "to"
+                    eventName = ctx.getChild(3).getText();
+                } else {
+                    eventName = ctx.getChild(2).getText();
+                }
+                if (ctx.date().NUMERICDATE() != null) { // if date is numeric
+                    date = DateHandler.getFromNumericDate(ctx.date().getText());
+                } else {
+                    date = DateHandler.getFromDate(ctx.date().getText());
+                }
             }
         }
     }
