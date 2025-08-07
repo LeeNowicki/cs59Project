@@ -76,6 +76,22 @@ public class JSONHandler {
         allObjects.remove(eventName);
     }
 
+    // This will add an "invitees" array to the JSON Object if it doesn't already
+    // exist, then add a JSONArray (essentially a tuple) to invitees containing the
+    // invitee's name and the date of the event.
+    public static void invite(String invitee, String eventName, Date date) {
+        JSONObject event = allObjects.get(eventName);
+        if (event != null) {
+            if (event.get("invitees") == null) {
+                event.put("invitees", new JSONArray());
+            } // TODO: throw exception
+            JSONArray nameDate = new JSONArray();
+            nameDate.put(invitee);
+            nameDate.put(date);
+            event.getJSONArray("invitees").put(nameDate);
+        }
+    }
+
     public static JSONObject getObject(String objectName) {
         return allObjects.get(objectName);
     }

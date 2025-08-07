@@ -90,19 +90,15 @@ public class EventJsonListener implements CalendarListener {
                 JSONHandler.addToMap();
 
             } else if (actionText.equals("Invite")) { // Grammar: 'Invite' NAME ('to')? NAME ('on')? date (file)?
-                String invitee = ctx.getChild(1).getText();
-                String eventName;
+                String invitee = ctx.NAME(0).toString();
+                String eventName = ctx.NAME(1).toString();
                 Date date;
-                if (ctx.getChild(2).getText().equals("to")) { // if there is a "to"
-                    eventName = ctx.getChild(3).getText();
-                } else {
-                    eventName = ctx.getChild(2).getText();
-                }
                 if (ctx.date().NUMERICDATE() != null) { // if date is numeric
                     date = DateHandler.getFromNumericDate(ctx.date().getText());
                 } else {
                     date = DateHandler.getFromDate(ctx.date().getText());
                 }
+                JSONHandler.invite(invitee, eventName, date);
             }
         }
     }
@@ -231,6 +227,10 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void exitEveryRule(ParserRuleContext parserRuleContext) {
+
+    }
+
+    public static void main(String[] args) {
 
     }
 }
