@@ -93,7 +93,7 @@ public class EventJsonListener implements CalendarListener {
                     if (ctx.date().NUMERICDATE() != null) { // if the date is in numeric format
                         date = DateHandler.getFromNumericDate(ctx.date().getText());
                     } else {
-                        date = DateHandler.getFromDate(ctx.date().getText());
+                        date = DateHandler.getFromDate(getDateString(ctx.date()));
                     }
                     JSONHandler.cancel(eventString, date); // remove event from hashset
                 } else { // if no date was included
@@ -103,9 +103,9 @@ public class EventJsonListener implements CalendarListener {
                 String reminderString = ctx.NAME().toString();
                 Date date;
                 if (ctx.date() != null && ctx.TIME() != null) {
-                    date = DateHandler.getFromDate(ctx.date().getText(), ctx.TIME().getText());
+                    date = DateHandler.getFromDate(getDateString(ctx.date()), ctx.TIME().getText());
                 } else if (ctx.date() != null) {
-                    date = DateHandler.getFromDate(ctx.date().getText());
+                    date = DateHandler.getFromDate(getDateString(ctx.date()));
                 } else {
                     date = DateHandler.getTimeNoDate(ctx.TIME().getText());
                 }
@@ -124,7 +124,7 @@ public class EventJsonListener implements CalendarListener {
                 if (dateCtx.NUMERICDATE() != null) {
                     targetDate = DateHandler.getFromNumericDate(dateCtx.NUMERICDATE().getText());
                 } else {
-                    targetDate = DateHandler.getFromDate(dateCtx.getText());
+                    targetDate = DateHandler.getFromDate(getDateString(dateCtx));
                 }
 
                 // Get how much to extend
@@ -180,7 +180,7 @@ public class EventJsonListener implements CalendarListener {
                 if (ctx.date().NUMERICDATE() != null) { // if date is numeric
                     date = DateHandler.getFromNumericDate(ctx.date().getText());
                 } else {
-                    date = DateHandler.getFromDate(ctx.date().getText());
+                    date = DateHandler.getFromDate(getDateString(ctx.date()));
                 }
                 JSONHandler.invite(invitee, eventName, date);
             }
