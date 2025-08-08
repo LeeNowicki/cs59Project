@@ -49,7 +49,7 @@ public class ParserDriver {
                 parser.start();
 
 
-                JSONHandler.printAll();
+                // JSONHandler.printAll();
             }
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);
@@ -58,6 +58,6 @@ public class ParserDriver {
             //catch(Exception e){System.out.println("Runtime error on line: " +l);System.out.println("Error details:" + e);}
         }
 
-
+        JSONHandler.printAll();
     };
 }

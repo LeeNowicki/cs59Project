@@ -174,8 +174,8 @@ public class EventJsonListener implements CalendarListener {
                 JSONHandler.addToMap();
 
             } else if (actionText.equals("Invite")) { // Grammar: 'Invite' NAME ('to')? NAME ('on')? date (file)?
-                String invitee = ctx.NAME(0).toString();
-                String eventName = ctx.NAME(1).toString();
+                String invitee = ctx.NAME(0).getText();
+                String eventName = ctx.NAME(1).getText();
                 Date date;
                 if (ctx.date().NUMERICDATE() != null) { // if date is numeric
                     date = DateHandler.getFromNumericDate(ctx.date().getText());
