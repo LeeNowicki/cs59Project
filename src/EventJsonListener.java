@@ -11,6 +11,27 @@ import java.util.Date;
 
 public class EventJsonListener implements CalendarListener {
 
+    //Helper functions
+    public String getDateString(CalendarParser.DateContext ctx){
+        if(!ctx.isEmpty()){
+            //if it's numeric
+            if(ctx.NUMERICDATE() != null){
+                return ctx.NUMERICDATE().getText();
+            }
+
+            //Otherwise loop through the children
+
+            StringBuilder dateString = new StringBuilder();
+
+            for(int i = 0; i<ctx.getChildCount();i++){
+                dateString.append(ctx.getChild(i).getText()+ " ");
+            }
+
+            return dateString.toString();
+        }
+        return null;
+    }
+
     @Override
     public void enterStart(CalendarParser.StartContext ctx) {
         JSONHandler.createThisObject();
@@ -168,27 +189,22 @@ public class EventJsonListener implements CalendarListener {
                     endTime = DateHandler.getTimeNoDate(ctx.time().TIME(1).toString());
                 }
             }
-            //Case 2 - Numeric Date format
-            else if(ctx.date().NUMERICDATE() != null){
-                dateString = ctx.date().NUMERICDATE().toString();
-                startTime = DateHandler.getFromNumericDate(dateString,timeString);
-                if (ctx.time().TIME(1) != null) {
-                    endTime = DateHandler.getFromNumericDate(dateString, ctx.time().TIME(1).toString());
-                }
-            }
-            //Case 3 - Written format - everything else that matched date
             else {
-                //dateString = ctx.date().getText(); // This does not work, as there are no delimiting spaces
+                dateString = getDateString(ctx.date());
+                if(ctx.date().NUMERICDATE() != null){
+                    startTime = DateHandler.getFromNumericDate(dateString, timeString);
+                    if (ctx.time().TIME(1) != null) {
+                        endTime = DateHandler.getFromNumericDate(dateString, ctx.time().TIME(1).toString());
+                    }
+                }
+                else {
+                    startTime = DateHandler.getFromDate(dateString, timeString);
+                    if (ctx.time().TIME(1) != null) {
+                        endTime = DateHandler.getFromDate(dateString, ctx.time().TIME(1).toString());
+                    }
+                }
 
-                //loop through the children, append to the string
-                for(int i = 0; i<ctx.date().getChildCount(); i++){
-                    dateString += ctx.date().getChild(i).getText() + " "; //add back the delimiting space
-                }
-                //System.out.println(dateString);
-                startTime = DateHandler.getFromDate(dateString, timeString);
-                if (ctx.time().TIME(1) != null) {
-                    endTime = DateHandler.getFromDate(dateString, ctx.time().TIME(1).toString());
-                }
+
             }
 
             if (endTime == null){

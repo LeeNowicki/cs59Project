@@ -1,6 +1,7 @@
 Appointment "dentist" 12:00
 Appointment "dentist" 15:00 - 20:00
 Appointment "dentist" 12:00 8/6/2025
+Appointment "dentist" 15:00 8/6/2025
 Appointment "dentist" 12:00 Aug 5 2025
-Cancel "dentist" 8/5/2025
+Appointment "orthodontist" 19:25 - 20:34 Aug 7 9999
 Cancel "dentist"
