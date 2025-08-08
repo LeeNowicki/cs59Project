@@ -3,9 +3,11 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -109,6 +111,45 @@ public class EventJsonListener implements CalendarListener {
                 }
                 ReminderHandler.createReminder(reminderString, date);
             } else if (actionText.equals("Extend")) {
+                String eventName = ctx.NAME().toString();
+                JSONObject obj = JSONHandler.getObject(eventName);
+                if (obj == null) {
+                    throw new ParseCancellationException("Event " + eventName + " not found for Extend");
+                }
+
+                CalendarParser.DateContext dateCtx = ctx.date();
+                Date targetDate;
+                if (dateCtx.NUMERICDATE() != null) {
+                    targetDate = DateHandler.getFromNumericDate(dateCtx.NUMERICDATE().getText());
+                } else {
+                    targetDate = DateHandler.getFromDate(dateCtx.getText());
+                }
+
+                // getText() doesn't work here
+                int amount = Integer.parseInt(ctx.duration().num().toString());
+                String unit = ctx.duration().getChild(1).getText();
+                boolean isHours = unit.startsWith("hour");
+
+                JSONArray starts = obj.getJSONArray("Start_Times");
+                JSONArray ends = obj.getJSONArray("End_Times");
+
+                for (int i = 0; i < starts.length(); i++) {
+                    Date start = (Date) starts.get(i);
+
+                    if (sameDay(start, targetDate)) {
+                        Date end = (Date) starts.get(i);
+
+                        if (isHours) {
+                            end.setHours(end.getHours() + amount);
+                        } else {
+                            end.setMinutes(end.getMinutes() + amount);
+                        }
+
+                        ends.put(i, end);
+
+                    }
+                }
+
 
             } else if (actionText.equals("Repeat")) {
                 String eventName = ctx.NAME().toString();
@@ -141,6 +182,10 @@ public class EventJsonListener implements CalendarListener {
                 JSONHandler.invite(invitee, eventName, date);
             }
         }
+    }
+
+    private static boolean sameDay(Date d1, Date d2) {
+        return d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getYear() == d2.getYear();
     }
 
     @Override
