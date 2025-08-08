@@ -418,11 +418,144 @@ throw new ParseCancellationException("line " + line + ":" + charPositionInLine +
 
 ~~~~
 
+P03 - Translator prototype
+===============
+
+We wrote listener functions (EventJsonListener.java) that generate JSON objects to represent events
+using functions from JSONHandler.
+
+We wrote the JSONHandler class to build the event objects
+using <a href="https://github.com/stleary/JSON-java">this JSON handling package for Java</a>, and store
+them in a HashMap.
+
+We wrote a Reminder class that stores reminders similarly - we will implement sending the reminders to
+the user as part of the release candidate.
+
+The DateHandler class parses dates the user provides and returns Date objects, the type that's contained
+in our JSON objects.
+
+Below are some trivial test cases (testing/trivial.txt):
+
+```
+Appointment "dentist" 12:00
+Appointment "dentist" 15:00 - 20:00
+Appointment "dentist" 12:00 8/6/2025
+Appointment "dentist" 12:00 Aug 5 2025
+Cancel "dentist" 8/5/2025
+Cancel "dentist"
+```
+
+And here are the resulting JSON objects:
+
+```
+{"\"dentist\"": {
+    "Type": "Appointment",
+    "RepeatDay": [],
+    "Start_Times": ["Thu Aug 07 12:00:00 EDT 2025"],
+    "End_Times": ["Thu Aug 07 13:00:00 EDT 2025"],
+    "Name": "\"dentist\""
+}}
+{"\"dentist\"": {
+    "Type": "Appointment",
+    "RepeatDay": [],
+    "Start_Times": [
+        "Thu Aug 07 12:00:00 EDT 2025",
+        "Thu Aug 07 15:00:00 EDT 2025"
+    ],
+    "End_Times": [
+        "Thu Aug 07 13:00:00 EDT 2025",
+        "Thu Aug 07 20:00:00 EDT 2025"
+    ],
+    "Name": "\"dentist\""
+}}
+{"\"dentist\"": {
+    "Type": "Appointment",
+    "RepeatDay": [],
+    "Start_Times": [
+        "Thu Aug 07 12:00:00 EDT 2025",
+        "Thu Aug 07 15:00:00 EDT 2025",
+        "Wed Aug 06 12:00:00 EDT 2025"
+    ],
+    "End_Times": [
+        "Thu Aug 07 13:00:00 EDT 2025",
+        "Thu Aug 07 20:00:00 EDT 2025",
+        "Wed Aug 06 13:00:00 EDT 2025"
+    ],
+    "Name": "\"dentist\""
+}}
+{"\"dentist\"": {
+    "Type": "Appointment",
+    "RepeatDay": [],
+    "Start_Times": [
+        "Thu Aug 07 12:00:00 EDT 2025",
+        "Thu Aug 07 15:00:00 EDT 2025",
+        "Wed Aug 06 12:00:00 EDT 2025",
+        "Tue Aug 05 12:00:00 EDT 2025"
+    ],
+    "End_Times": [
+        "Thu Aug 07 13:00:00 EDT 2025",
+        "Thu Aug 07 20:00:00 EDT 2025",
+        "Wed Aug 06 13:00:00 EDT 2025",
+        "Tue Aug 05 13:00:00 EDT 2025"
+    ],
+    "Name": "\"dentist\""
+}}
+{"\"dentist\"": {
+    "Type": "Appointment",
+    "RepeatDay": [],
+    "Start_Times": [
+        "Thu Aug 07 12:00:00 EDT 2025",
+        "Thu Aug 07 15:00:00 EDT 2025",
+        "Wed Aug 06 12:00:00 EDT 2025"
+    ],
+    "End_Times": [
+        "Thu Aug 07 13:00:00 EDT 2025",
+        "Thu Aug 07 20:00:00 EDT 2025",
+        "Wed Aug 06 13:00:00 EDT 2025"
+    ],
+    "Name": "\"dentist\""
+}}
+{}
+```
+
+These are some less-trivial inputs:
+
+Appointment "Dentist" 08:00-09:00 5/5/1914
+Extend "Dentist" 5/5/1914 1000 min
+Cancel "Dentist" May 5 1914
+Reminder "Hello World" May 5 1914 05:00
+Sport "Soccer Practice" 18:01-18:03 Jun 30 333333333
+Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
+Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
+Repeat "Dentist" Monthly
+Invite "Jacob" to "Dentist" on 5/5/1914 stdout
+Class 16:00 to 18:00
+Class 16:00 - 18:00
+Class "CS" 20:00 - 22:00
+Repeat "CS" Weekly
+Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
+Repeat "CS" Annually
+Extend "CS" Aug 2 31 hours
+Extend "CS" Aug 2 32 hours
+Cancel "Project" July 8
+Appointment 04:00 May 6
+
+Class "Arabic" 19:00 to 25:00
+Extend "DNE" on August 2 1 hour
+Meeting Party "thing"
+16:00 - 20:00 "CS Class"
+Repeat "CS Class"
+Class "CS Class" 16:00-20:00 August 32
+
+
+
+
 Meeting & Approval dates
 ================
 We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
 We met on 7/23/2025 to begin writing a real grammar structure
 We met on 7/30/2025 to generate our Parser and update our grammar
+We met on 8/5, 8/6 and 8/7/2025 to write our translator
 
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
