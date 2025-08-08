@@ -15,7 +15,7 @@ public class JSONHandler {
 
         singleObject.put("Start_Times", new JSONArray());
         singleObject.put("End_Times", new JSONArray());
-
+        singleObject.put("invitees", new JSONArray());
         singleObject.put("RepeatDay", new JSONArray());
     }
 
@@ -83,9 +83,6 @@ public class JSONHandler {
     public static void invite(String invitee, String eventName, Date date) {
         JSONObject event = allObjects.get(eventName);
         if (event != null) {
-            if (event.get("invitees") == null) {
-                event.put("invitees", new JSONArray());
-            } // TODO: throw exception
             JSONArray nameDate = new JSONArray();
             nameDate.put(invitee);
             nameDate.put(date);
