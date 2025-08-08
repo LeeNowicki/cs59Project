@@ -518,7 +518,7 @@ And here are the resulting JSON objects:
 {}
 ```
 
-These are some less-trivial inputs:
+These are some less-trivial inputs that are all meant to pass (testing/pass.txt):
 
 Appointment "Dentist" 08:00-09:00 5/5/1914
 Extend "Dentist" 5/5/1914 1000 min
@@ -529,8 +529,8 @@ Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
 Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
 Repeat "Dentist" Monthly
 Invite "Jacob" to "Dentist" on 5/5/1914 stdout
-Class 16:00 to 18:00
-Class 16:00 - 18:00
+Class "CS59" 16:00 to 18:00
+Class "CS59" 16:00 - 18:00
 Class "CS" 20:00 - 22:00
 Repeat "CS" Weekly
 Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
@@ -538,14 +538,78 @@ Repeat "CS" Annually
 Extend "CS" Aug 2 31 hours
 Extend "CS" Aug 2 32 hours
 Cancel "Project" July 8
-Appointment 04:00 May 6
+Appointment "Office Hours" 04:00 May 6
 
-Class "Arabic" 19:00 to 25:00
-Extend "DNE" on August 2 1 hour
-Meeting Party "thing"
-16:00 - 20:00 "CS Class"
-Repeat "CS Class"
-Class "CS Class" 16:00-20:00 August 32
+These are the resulting JSON objects:
+
+{
+    "\"Soccer Practice\"": {
+        "Type": "Sport",
+        "RepeatDay": [
+            4,
+            2,
+            3,
+            6
+        ],
+        "invitees": [],
+        "Start_Times": ["Wed Oct 14 03:35:08 EST 251215559"],
+        "Repeat": "Every",
+        "End_Times": ["Wed Oct 14 03:37:08 EST 251215559"],
+        "Name": "\"Soccer Practice\""
+    },
+    "\"CS\"": {
+        "Type": "Class",
+        "RepeatDay": [
+            2,
+            4,
+            3
+        ],
+        "invitees": [],
+        "Start_Times": ["Thu Aug 07 20:00:00 EDT 2025"],
+        "Repeat": "Annually",
+        "End_Times": ["Thu Aug 07 22:00:00 EDT 2025"],
+        "Name": "\"CS\""
+    },
+    "\"Dentist\"": {
+        "Type": "Appointment",
+        "RepeatDay": [
+            0,
+            0,
+            3,
+            0
+        ],
+        "invitees": [[
+        "\"Jacob\"",
+        "Tue May 05 21:00:00 EST 1914"
+        ]],
+        "Start_Times": [],
+        "Repeat": "Monthly",
+        "End_Times": [],
+        "Name": "\"Dentist\""
+    },
+    "\"CS59\"": {
+        "Type": "Class",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": [
+            "Thu Aug 07 16:00:00 EDT 2025",
+            "Thu Aug 07 16:00:00 EDT 2025"
+        ],
+        "End_Times": [
+            "Thu Aug 07 18:00:00 EDT 2025",
+            "Thu Aug 07 18:00:00 EDT 2025"
+        ],
+        "Name": "\"CS59\""
+    },
+    "\"Office Hours\"": {
+        "Type": "Appointment",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Tue May 06 04:00:00 EDT 2025"],
+        "End_Times": ["Tue May 06 05:00:00 EDT 2025"],
+        "Name": "\"Office Hours\""
+    }
+}
 
 
 
