@@ -48,7 +48,7 @@ public class JSONHandler {
     }
 
     public static void addToMap() {
-        allObjects.put(objectName, singleObject);
+        allObjects.put(singleObject.get("Name").toString(), singleObject);
     }
 
     // TODO: fill out the functions

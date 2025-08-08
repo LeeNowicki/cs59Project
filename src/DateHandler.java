@@ -57,7 +57,6 @@ public class DateHandler {
     public static Date getFromDate(String dateString) {
         Date today = new Date();
         String[] monthDayYear = dateString.split(" ");
-        System.out.println(monthDayYear[0]);
         monthDayYear[0] = (DateHandler.monthValues.get((monthDayYear[0]))).toString();
 
         if (monthDayYear.length == 3) {

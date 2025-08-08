@@ -71,7 +71,7 @@ public class EventJsonListener implements CalendarListener {
         switch (txt.toLowerCase()) {
             case "sun": case "sunday": return 0;
             case "mon": case "monday": return 1;
-            case "tue": case "tuesday": return 2;
+            case "tues": case "tuesday": return 2;
             case "wed": case "wednesday": return 3;
             case "thurs": case "thursday": return 4;
             case "fri": case "friday": return 5;
