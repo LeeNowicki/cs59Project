@@ -53,6 +53,7 @@ public class ParserDriver {
             }
             catch(ParseCancellationException e) {
                 System.out.print("FAIL: " + l);
+                System.out.println(e.getMessage());
             }
             //catch(Exception e){System.out.println("Runtime error on line: " +l);System.out.println("Error details:" + e);}
         }

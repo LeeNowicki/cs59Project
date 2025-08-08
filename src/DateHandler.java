@@ -57,24 +57,42 @@ public class DateHandler {
     public static Date getFromDate(String dateString) {
         Date today = new Date();
         String[] monthDayYear = dateString.split(" ");
+        System.out.println(monthDayYear[0]);
         monthDayYear[0] = (DateHandler.monthValues.get((monthDayYear[0]))).toString();
 
-        return new Date(Integer.parseInt(monthDayYear[2]) - 1900,
-                Integer.parseInt(monthDayYear[0]),
-                Integer.parseInt(monthDayYear[1]),
-                today.getHours(), today.getMinutes());
+        if (monthDayYear.length == 3) {
+            return new Date(Integer.parseInt(monthDayYear[2]) - 1900,
+                    Integer.parseInt(monthDayYear[0]),
+                    Integer.parseInt(monthDayYear[1]),
+                    today.getHours(), today.getMinutes());
+        } else {
+            return new Date(today.getYear(),
+                    Integer.parseInt(monthDayYear[0]),
+                    Integer.parseInt(monthDayYear[1]),
+                    today.getHours(), today.getMinutes());
+        }
+
     }
 
     public static Date getFromDate(String dateString, String Time) {
+        Date today =  new Date();
         String[] hourTime = Time.split(":");
         String[] monthDayYear = dateString.split(" ");
         monthDayYear[0] = (DateHandler.monthValues.get((monthDayYear[0]))).toString();
 
-        return new Date(Integer.parseInt(monthDayYear[2]) - 1900,
-                Integer.parseInt(monthDayYear[0]),
-                Integer.parseInt(monthDayYear[1]),
-                Integer.parseInt(hourTime[0]),
-                Integer.parseInt(hourTime[1]));
+        if (monthDayYear.length == 3) {
+            return new Date(Integer.parseInt(monthDayYear[2]) - 1900,
+                    Integer.parseInt(monthDayYear[0]),
+                    Integer.parseInt(monthDayYear[1]),
+                    Integer.parseInt(hourTime[0]),
+                    Integer.parseInt(hourTime[1]));
+        } else {
+            return new Date(today.getYear(),
+                    Integer.parseInt(monthDayYear[0]),
+                    Integer.parseInt(monthDayYear[1]),
+                    Integer.parseInt(hourTime[0]),
+                    Integer.parseInt(hourTime[1]));
+        }
     }
 
     public static void main(String[] args) {

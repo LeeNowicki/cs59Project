@@ -111,12 +111,14 @@ public class EventJsonListener implements CalendarListener {
                 }
                 ReminderHandler.createReminder(reminderString, date);
             } else if (actionText.equals("Extend")) {
-                String eventName = ctx.NAME().toString();
+                // Pull event by name
+                String eventName = ctx.NAME(0).getText();
                 JSONObject obj = JSONHandler.getObject(eventName);
                 if (obj == null) {
                     throw new ParseCancellationException("Event " + eventName + " not found for Extend");
                 }
 
+                // Grab given date
                 CalendarParser.DateContext dateCtx = ctx.date();
                 Date targetDate;
                 if (dateCtx.NUMERICDATE() != null) {
@@ -125,11 +127,12 @@ public class EventJsonListener implements CalendarListener {
                     targetDate = DateHandler.getFromDate(dateCtx.getText());
                 }
 
-                // getText() doesn't work here
-                int amount = Integer.parseInt(ctx.duration().num().toString());
+                // Get how much to extend
+                int amount = Integer.parseInt(ctx.duration().num().getText());
                 String unit = ctx.duration().getChild(1).getText();
                 boolean isHours = unit.startsWith("hour");
 
+                // Get starts and ends for event
                 JSONArray starts = obj.getJSONArray("Start_Times");
                 JSONArray ends = obj.getJSONArray("End_Times");
 
@@ -137,7 +140,7 @@ public class EventJsonListener implements CalendarListener {
                     Date start = (Date) starts.get(i);
 
                     if (sameDay(start, targetDate)) {
-                        Date end = (Date) starts.get(i);
+                        Date end = (Date) ends.get(i);
 
                         if (isHours) {
                             end.setHours(end.getHours() + amount);
@@ -152,7 +155,7 @@ public class EventJsonListener implements CalendarListener {
 
 
             } else if (actionText.equals("Repeat")) {
-                String eventName = ctx.NAME().toString();
+                String eventName = ctx.NAME(0).getText();
                 JSONObject obj = JSONHandler.getObject(eventName);
                 if (obj == null) {
                     throw new ParseCancellationException("Event " + eventName + " not found for Repeat");
