@@ -15,8 +15,11 @@ action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
         |
         ;
 
-event: ID (NAME)? time (date)? ;
+event: TYPE NAME time (date)? ;
 
+// When parsing the repeats. We will have two JSONs
+// "Repeat": [Annually, Monthly]
+// "RepeatDay": [0, 3, 4]
 frequency: 'Every' weekday ('and' weekday)*
         |'Biweekly' (weekday)? ('and' weekday)*
         |'Annually'
@@ -34,7 +37,7 @@ weekday: 'Mon' | 'Monday'
 
 file: 'stdout'; //add others
 
-duration: (num ('hours'|'min'|'sec'))+;
+duration: num ('hours'|'mins'|'hour'|'min');
 
 time: TIME
     | TIME 'to' TIME
@@ -53,10 +56,12 @@ num: INT | TWENTYNINE | TWENTYEIGHT | THIRTY | THIRTYONE;
 
 NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
 
-ID: [A-Za-z]([A-Za-z0-9])*;
+TYPE: [A-Za-z]([A-Za-z0-9])*;
 
 TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
 //|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
+
+NUMERICDATE: ((('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/')([1-9]|[1-2][0-9]|'3'[0-1]))|(('4/'|'6/'|'9/'|'11/')([1-9]|[1-2][0-9]|'30'))|(('2/')([1-9]|[1-2][0-8])))('/'[0-9][0-9][0-9][0-9]);
 
 TWENTYEIGHT: ([1-9]|[1-2][0-8]);
 
@@ -65,8 +70,6 @@ TWENTYNINE: ([1-9]|[1-2][0-9]);
 THIRTY: ([1-9]|[1-2][0-9]|'30');
         
 THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
-
-NUMERICDATE: ((('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/')[1-9]|[1-2][0-9]|'3'[0-1])|(('4/'|'6/'|'9/'|'11/')[1-9]|[1-2][0-9]|'30')|(('2/')[1-9]|[1-2][0-8]))('/'[0-9][0-9][0-9][0-9]);
 
 INT: [0-9]([0-9])*;
 
