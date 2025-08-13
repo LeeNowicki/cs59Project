@@ -1,0 +1,2 @@
+Sport "Soccer" 09:00-10:00
+Repeat "Soccer" Every Thurs and Tues and Wed and Sat
