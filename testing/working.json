@@ -1,0 +1,14 @@
+{"\"Soccer\"": {
+    "Type": "Sport",
+    "RepeatDay": [
+        4,
+        2,
+        3,
+        6
+    ],
+    "invitees": [],
+    "Start_Times": ["Wed Aug 13 09:00:00 EDT 2025"],
+    "Repeat": "Every",
+    "End_Times": ["Wed Aug 13 10:00:00 EDT 2025"],
+    "Name": "\"Soccer\""
+}}
