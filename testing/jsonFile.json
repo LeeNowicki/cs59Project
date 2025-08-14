@@ -1,0 +1,68 @@
+{
+    "\"Soccer Practice\"": {
+        "Type": "Sport",
+        "RepeatDay": [
+            4,
+            2,
+            3,
+            6
+        ],
+        "invitees": [],
+        "Start_Times": ["Mon Jun 30 18:01:00 EDT 9000"],
+        "Repeat": "Every",
+        "End_Times": ["Mon Jun 30 18:03:00 EDT 9000"],
+        "Name": "\"Soccer Practice\""
+    },
+    "\"CS\"": {
+        "Type": "Class",
+        "RepeatDay": [
+            2,
+            4,
+            3
+        ],
+        "invitees": [],
+        "Start_Times": ["Thu Aug 14 20:00:00 EDT 2025"],
+        "Repeat": "Annually",
+        "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
+        "Name": "\"CS\""
+    },
+    "\"Dentist\"": {
+        "Type": "Appointment",
+        "RepeatDay": [
+            0,
+            0,
+            3,
+            0
+        ],
+        "invitees": [[
+            "\"Jacob\"",
+            "Tue May 05 14:04:00 EST 1914"
+        ]],
+        "Start_Times": [],
+        "Repeat": "Monthly",
+        "End_Times": [],
+        "Name": "\"Dentist\""
+    },
+    "\"CS59\"": {
+        "Type": "Class",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": [
+            "Thu Aug 14 16:00:00 EDT 2025",
+            "Thu Aug 14 16:00:00 EDT 2025"
+        ],
+        "End_Times": [
+            "Thu Aug 14 18:00:00 EDT 2025",
+            "Thu Aug 14 18:00:00 EDT 2025"
+        ],
+        "Name": "\"CS59\""
+    },
+    "\"Office Hours\"": {
+        "Type": "Appointment",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Tue May 06 04:00:00 EDT 2025"],
+        "End_Times": ["Tue May 06 05:00:00 EDT 2025"],
+        "Name": "\"Office Hours\""
+    }
+}
