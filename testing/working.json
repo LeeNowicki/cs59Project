@@ -3,26 +3,26 @@
         "Type": "Class",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Thu Aug 14 01:00:00 EDT 2025"],
+        "Start_Times": ["Thu Aug 14 01:15:00 EDT 2030"],
         "Repeat": "Annually",
-        "End_Times": ["Thu Aug 14 18:00:00 EDT 2025"],
+        "End_Times": ["Thu Aug 14 18:23:00 EDT 2030"],
         "Name": "\"CS\""
     },
     "\"Dentist\"": {
         "Type": "Appointment",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Wed Aug 20 03:00:00 EDT 2025"],
-        "End_Times": ["Wed Aug 20 04:00:00 EDT 2025"],
+        "Start_Times": ["Wed Aug 20 03:03:00 EDT 2025"],
+        "End_Times": ["Wed Aug 20 04:05:00 EDT 2025"],
         "Name": "\"Dentist\""
     },
     "\"CS59\"": {
         "Type": "Class",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Sat Sep 20 12:00:00 EDT 2025"],
+        "Start_Times": ["Sat Sep 20 12:03:00 EDT 2025"],
         "Repeat": "Monthly",
-        "End_Times": ["Sat Sep 20 14:00:00 EDT 2025"],
+        "End_Times": ["Sat Sep 20 14:43:00 EDT 2025"],
         "Name": "\"CS59\""
     },
     "\"Arabic\"": {
@@ -34,13 +34,13 @@
         ],
         "invitees": [],
         "Start_Times": [
-            "Thu Aug 14 02:00:00 EDT 2025",
-            "Thu Aug 14 05:00:00 EDT 2025"
+            "Thu Aug 14 02:30:00 EDT 2025",
+            "Thu Aug 14 05:50:00 EDT 2025"
         ],
         "Repeat": "Biweekly",
         "End_Times": [
-            "Thu Aug 14 03:00:00 EDT 2025",
-            "Thu Aug 14 06:00:00 EDT 2025"
+            "Thu Aug 14 03:30:00 EDT 2025",
+            "Thu Aug 14 06:50:00 EDT 2025"
         ],
         "Name": "\"Arabic\""
     },

@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.converter.LocalDateTimeStringConverter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,6 +84,10 @@ public class JSONtoCalendar extends Application {
 
                     Entry recur = currEntry.createRecurrence();
                     recur.setTitle(currEntry.getTitle());
+                    recur.changeStartTime(calTimeStart);
+                    recur.changeEndTime(calTimeEnd);
+                    recur.changeStartDate(calDateStart);
+                    recur.changeEndDate(calDateEnd);
 
                     String rrule = null;
                     String byDay = buildDaySegment(repeatDays, calDateStart);
@@ -187,7 +189,7 @@ public class JSONtoCalendar extends Application {
             case THURSDAY: return "TH";
             case FRIDAY: return "FR";
             case SATURDAY: return "SA";
-            case SUNDAY: return "DA";
+            case SUNDAY: return "SU";
             default: return null;
         }
     }
