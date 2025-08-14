@@ -36,6 +36,11 @@
         "End_Times": ["Fri Aug 22 15:00:00 EDT 2025"],
         "Name": "\"Check Credit Cards\""
     },
+    "\"Get Laundry\"": {
+        "Type": "Reminders",
+        "Date": "Sun Aug 10 12:00:00 EDT 2025",
+        "Name": "\"Get Laundry\""
+    },
     "\"CS59\"": {
         "Type": "Class",
         "RepeatDay": [

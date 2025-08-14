@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
 
 public class JSONtoCalendar extends Application {
 
@@ -54,8 +55,24 @@ public class JSONtoCalendar extends Application {
                     style = 0;
                 }
             }
-
             Calendar currCal = types.get(event.getString("Type"));
+            if (event.getString("Type").equals("Reminders")) {
+                Entry currEntry = new Entry();
+                currEntry.setTitle(event.getString("Name"));
+
+                Date startDate = new Date(event.getString("Date"));
+                LocalDate calStartDate = LocalDate.of(startDate.getYear() + 1900, startDate.getMonth() + 1, startDate.getDate());
+                LocalTime localStartTime = LocalTime.of(startDate.getHours(), startDate.getMinutes());
+                LocalTime localEndTime = LocalTime.of(startDate.getHours(), startDate.getMinutes() + 15);
+
+                currEntry.changeStartDate(calStartDate);
+                currEntry.changeEndDate(calStartDate);
+                currEntry.changeStartTime(localStartTime);
+                currEntry.changeEndTime(localEndTime);
+
+                currCal.addEntry(currEntry);
+                continue;
+            }
             for (int i = 0; i < event.getJSONArray("Start_Times").length(); i++) {
                 Entry currEntry = new Entry();
                 currEntry.setTitle(event.getString("Name"));
