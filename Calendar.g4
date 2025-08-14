@@ -20,7 +20,7 @@ event: TYPE NAME time (date)? ;
 // When parsing the repeats. We will have two JSONs
 // "Repeat": [Annually, Monthly]
 // "RepeatDay": [0, 3, 4]
-frequency: 'Every' weekday ('and' weekday)*
+frequency: 'Every' (weekday)? ('and' weekday)*
         |'Biweekly' (weekday)? ('and' weekday)*
         |'Annually'
         |'Weekly' (weekday)? ('and' weekday)*

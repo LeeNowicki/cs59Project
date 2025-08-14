@@ -14,11 +14,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class JSONtoCalendar extends Application {
 
@@ -77,40 +80,49 @@ public class JSONtoCalendar extends Application {
                 currEntry.changeEndDate(calDateEnd);
 
                 currCal.addEntry(currEntry);
+                if (event.keySet().contains("Repeat")) {
+                    String repeat = event.getString("Repeat");
+                    JSONArray repeatDays = event.getJSONArray("RepeatDay");
+
+                    Entry recur = currEntry.createRecurrence();
+                    recur.setTitle(currEntry.getTitle());
+
+                    String rrule = null;
+                    String byDay = buildDaySegment(repeatDays, calDateStart);
+
+                    if (repeat.equals("Weekly")) {
+                        rrule = "FREQ=WEEKLY" + byDay;
+                    } else if (repeat.equals("Every")) {
+                        if (hasDays(repeatDays)) {
+                            rrule = "FREQ=WEEKLY" + byDay;
+                        } else {
+                            rrule = "FREQ=DAILY";
+                        }
+                    }
+                    else if (repeat.equals("Biweekly")) {
+                        rrule = "FREQ=WEEKLY;INTERVAL=2" + byDay;
+                    } else if (repeat.equals("Monthly")) {
+                        rrule = "FREQ=MONTHLY;BYMONTHDAY=" + calDateStart.getDayOfMonth();
+                    } else if (repeat.equals("Annually")) {
+                        rrule = "FREQ=YEARLY;BYMONTH=" + calDateStart.getMonthValue() +
+                                ";BYMONTHDAY=" + calDateStart.getDayOfMonth();
+                    }
+
+                    if (rrule != null) {
+                        recur.setRecurrenceRule(rrule);
+                        recur.changeStartDate(recur.getStartDate().plusDays(1));
+                        currCal.addEntry(recur);
+                    }
+                }
             }
 
         }
 
         CalendarView calendarView = new CalendarView(); // (1)
 
-        Calendar birthdays = new Calendar("Birthdays"); // (2)
-        Calendar holidays = new Calendar("Holidays");
-
-        birthdays.setStyle(Calendar.Style.getStyle(0)); // (3)
-        holidays.setStyle(Calendar.Style.getStyle(1));
-
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // (4)
-        myCalendarSource.getCalendars().addAll(birthdays, holidays);
         myCalendarSource.getCalendars().addAll(types.values());
-
-        Entry entry = new Entry();
-        LocalDateTime ldt = LocalDateTime.of(2025, 8, 16, 10, 20, 0);
-        LocalTime lt = LocalTime.of(ldt.getHour(), ldt.getMinute());
-        entry.changeStartTime(lt);
-        entry.changeEndTime(LocalTime.of(lt.getHour() + 1, lt.getMinute()));
-        entry.changeStartDate(LocalDate.of(ldt.getYear(), ldt.getMonth(), ldt.getDayOfMonth()));
-        entry.setTitle("Soccer");
-
-        Entry recur = entry.createRecurrence();
-        recur.setRecurrenceRule("FREQ=WEEKLY;BYDAY=MO,TU");
-        recur.setTitle(entry.getTitle());
-
-        System.out.println(entry);
-        //birthdays.addEntry(entry);
-        //holidays.addEntry(recur);
-
         calendarView.getCalendarSources().addAll(myCalendarSource); // (5)
-
         calendarView.setRequestedTime(LocalTime.now());
 
         Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
@@ -144,5 +156,52 @@ public class JSONtoCalendar extends Application {
         primaryStage.setHeight(1000);
         primaryStage.centerOnScreen();
         primaryStage.show();
+    }
+
+    private static boolean hasDays(JSONArray arr) {
+        return arr != null && arr.length() > 0;
+    }
+
+    private static String buildDaySegment(JSONArray repeatDays, LocalDate date) {
+        List<String> tokens  = new ArrayList<>();
+        if (hasDays(repeatDays)) {
+            for (int i = 0; i < repeatDays.length(); i++) {
+                int v = repeatDays.optInt(i, -1);
+                String t = dayTokenFromInt(v);
+                if (t != null) {
+                    tokens.add(t);
+                }
+            }
+        }
+        if (tokens.isEmpty() && date != null) {
+            tokens.add(dayTokenFromDOW(date.getDayOfWeek()));
+        }
+        return tokens.isEmpty() ? "" : ";BYDAY=" + String.join(",", tokens);
+    }
+
+    private static String dayTokenFromDOW(DayOfWeek d) {
+        switch (d) {
+            case MONDAY: return "MO";
+            case TUESDAY: return "TU";
+            case WEDNESDAY: return "WE";
+            case THURSDAY: return "TH";
+            case FRIDAY: return "FR";
+            case SATURDAY: return "SA";
+            case SUNDAY: return "DA";
+            default: return null;
+        }
+    }
+
+    private static String dayTokenFromInt(int n) {
+        switch (n) {
+            case 0: return "SU";
+            case 1: return "MO";
+            case 2: return "TU";
+            case 3: return "WE";
+            case 4: return "TH";
+            case 5: return "FR";
+            case 6: return "SA";
+            default: return null;
+        }
     }
 }

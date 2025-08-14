@@ -7,3 +7,4 @@ Repeat "Arabic" Biweekly Tues and Wed and Sun
 Class "CS59" 12:00 - 14:00 9/20/2025
 Repeat "CS59" Monthly
 Repeat "CS" Annually
+Appointment "Dentist" 03:00 - 04:00 8/20/2025

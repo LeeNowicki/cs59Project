@@ -8,6 +8,14 @@
         "End_Times": ["Thu Aug 14 18:00:00 EDT 2025"],
         "Name": "\"CS\""
     },
+    "\"Dentist\"": {
+        "Type": "Appointment",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Wed Aug 20 03:00:00 EDT 2025"],
+        "End_Times": ["Wed Aug 20 04:00:00 EDT 2025"],
+        "Name": "\"Dentist\""
+    },
     "\"CS59\"": {
         "Type": "Class",
         "RepeatDay": [],
