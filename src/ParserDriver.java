@@ -63,7 +63,7 @@ public class ParserDriver {
 
         try {
             //writes to jsonFile, change pathname to take from args or something if required
-            String pathname = "testing/jsonFile.json";
+            String pathname = "testing/working.json";
             File jsonFile = new File(pathname);
             jsonFile.createNewFile();
 

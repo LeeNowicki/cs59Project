@@ -1,14 +1,53 @@
-{"\"Soccer\"": {
-    "Type": "Sport",
-    "RepeatDay": [
-        4,
-        2,
-        3,
-        6
-    ],
-    "invitees": [],
-    "Start_Times": ["Wed Aug 13 09:00:00 EDT 2025"],
-    "Repeat": "Every",
-    "End_Times": ["Wed Aug 13 10:00:00 EDT 2025"],
-    "Name": "\"Soccer\""
-}}
+{
+    "\"CS\"": {
+        "Type": "Class",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Thu Aug 14 01:00:00 EDT 2025"],
+        "Repeat": "Annually",
+        "End_Times": ["Thu Aug 14 18:00:00 EDT 2025"],
+        "Name": "\"CS\""
+    },
+    "\"CS59\"": {
+        "Type": "Class",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Sat Sep 20 12:00:00 EDT 2025"],
+        "Repeat": "Monthly",
+        "End_Times": ["Sat Sep 20 14:00:00 EDT 2025"],
+        "Name": "\"CS59\""
+    },
+    "\"Arabic\"": {
+        "Type": "Class",
+        "RepeatDay": [
+            2,
+            3,
+            0
+        ],
+        "invitees": [],
+        "Start_Times": [
+            "Thu Aug 14 02:00:00 EDT 2025",
+            "Thu Aug 14 05:00:00 EDT 2025"
+        ],
+        "Repeat": "Biweekly",
+        "End_Times": [
+            "Thu Aug 14 03:00:00 EDT 2025",
+            "Thu Aug 14 06:00:00 EDT 2025"
+        ],
+        "Name": "\"Arabic\""
+    },
+    "\"Soccer\"": {
+        "Type": "Sport",
+        "RepeatDay": [
+            4,
+            2,
+            3,
+            6
+        ],
+        "invitees": [],
+        "Start_Times": ["Thu Aug 14 09:00:00 EDT 2025"],
+        "Repeat": "Every",
+        "End_Times": ["Thu Aug 14 10:00:00 EDT 2025"],
+        "Name": "\"Soccer\""
+    }
+}

@@ -1,2 +1,9 @@
 Sport "Soccer" 09:00-10:00
 Repeat "Soccer" Every Thurs and Tues and Wed and Sat
+Class "CS" 01:00 to 18:00
+Class "Arabic" 02:00 to 03:00
+Class "Arabic" 05:00 to 06:00
+Repeat "Arabic" Biweekly Tues and Wed and Sun
+Class "CS59" 12:00 - 14:00 9/20/2025
+Repeat "CS59" Monthly
+Repeat "CS" Annually

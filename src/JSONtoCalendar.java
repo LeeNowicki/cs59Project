@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.HashMap;
 
 public class JSONtoCalendar extends Application {
 
@@ -34,18 +37,61 @@ public class JSONtoCalendar extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        System.out.println(EVENTS);
+        HashMap<String, Calendar> types = new HashMap<>();
+
+        int style = 0;
+        for (String key : EVENTS.keySet()) {
+            JSONObject event = EVENTS.getJSONObject(key);
+            if (!types.containsKey(event.getString("Type"))) {
+                String type = event.getString("Type");
+                Calendar newCal = new Calendar(type);
+                newCal.setStyle(Calendar.Style.getStyle(style));
+                types.put(type, newCal);
+
+                style++;
+                if (style == 8) {
+                    style = 0;
+                }
+            }
+
+            Calendar currCal = types.get(event.getString("Type"));
+            for (int i = 0; i < event.getJSONArray("Start_Times").length(); i++) {
+                Entry currEntry = new Entry();
+                currEntry.setTitle(event.getString("Name"));
+
+
+                JSONArray startTimes = event.getJSONArray("Start_Times");
+                JSONArray endTimes = event.getJSONArray("End_Times");
+                Date currStart = new Date(startTimes.getString(i));
+                Date currEnd = new Date(endTimes.getString(i));
+
+
+                LocalDate calDateStart = LocalDate.of(currStart.getYear() + 1900, currStart.getMonth() + 1, currStart.getDate());
+                LocalTime calTimeStart = LocalTime.of(currStart.getHours(), currStart.getMinutes());
+                LocalDate calDateEnd = LocalDate.of(currEnd.getYear() + 1900, currEnd.getMonth() + 1, currEnd.getDate());
+                LocalTime calTimeEnd = LocalTime.of(currEnd.getHours(), currEnd.getMinutes());
+
+                currEntry.changeStartTime(calTimeStart);
+                currEntry.changeEndTime(calTimeEnd);
+                currEntry.changeStartDate(calDateStart);
+                currEntry.changeEndDate(calDateEnd);
+
+                currCal.addEntry(currEntry);
+            }
+
+        }
 
         CalendarView calendarView = new CalendarView(); // (1)
 
         Calendar birthdays = new Calendar("Birthdays"); // (2)
         Calendar holidays = new Calendar("Holidays");
 
-        birthdays.setStyle(Calendar.Style.STYLE1); // (3)
-        holidays.setStyle(Calendar.Style.STYLE2);
+        birthdays.setStyle(Calendar.Style.getStyle(0)); // (3)
+        holidays.setStyle(Calendar.Style.getStyle(1));
 
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // (4)
         myCalendarSource.getCalendars().addAll(birthdays, holidays);
+        myCalendarSource.getCalendars().addAll(types.values());
 
         Entry entry = new Entry();
         LocalDateTime ldt = LocalDateTime.of(2025, 8, 16, 10, 20, 0);
@@ -59,8 +105,9 @@ public class JSONtoCalendar extends Application {
         recur.setRecurrenceRule("FREQ=WEEKLY;BYDAY=MO,TU");
         recur.setTitle(entry.getTitle());
 
-        birthdays.addEntry(entry);
-        birthdays.addEntry(recur);
+        System.out.println(entry);
+        //birthdays.addEntry(entry);
+        //holidays.addEntry(recur);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // (5)
 
