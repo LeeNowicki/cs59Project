@@ -60,6 +60,7 @@ public class ParserDriver {
         }
 
         JSONHandler.printAll();
+        JSONHandler.printInviteFiles("testing/invites/");
 
         try {
             //writes to jsonFile, change pathname to take from args or something if required

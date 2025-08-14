@@ -1,5 +1,6 @@
 import org.json.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 import java.util.HashMap;
@@ -128,6 +129,92 @@ public class JSONHandler {
         catch (Exception e){
             System.out.println("Error occured when writing to file:" + e);
         }
-
     }
+
+    public static void printInviteFiles(String directory) {
+        try{
+            HashMap<String, JSONObject> inviteMap = new HashMap<>();
+            for(JSONObject obj : allObjects.values()){
+                JSONArray invitees = obj.getJSONArray("invitees");
+                if(!invitees.isEmpty()){
+                    for(int ind = 0; ind < invitees.length(); ind++){
+                        //write to file
+                        // TODO: currently no checks if the specific instance of the event exists
+                        String name = invitees.getJSONArray(ind).get(0).toString();
+                        Date date = (Date)invitees.getJSONArray(ind).get(1);
+
+                        JSONObject inviteParent = inviteMap.get(name);
+
+                        if(inviteParent == null){
+                            //new person
+                            inviteParent = new JSONObject();
+                        }
+                        else {
+                             inviteParent = inviteMap.get(name);
+                        }
+
+                        //Find out if this is a repeat event
+                        JSONObject invite;
+                        try {
+                            //this throws an error if it does not exist
+                            invite = inviteParent.getJSONObject(obj.get("Name").toString());
+                        }
+                        catch (Exception e) {
+                            invite = new JSONObject();
+                            invite.put("Type", obj.get("Type"));
+                            invite.put("Name", obj.get("Name"));
+                            invite.put("Start_Times", new JSONArray());
+                            invite.put("End_Times", new JSONArray());
+                        }
+                        //This is for a new event, so we can make a new invite
+
+
+                        //Loop through the all the start times and add the ones that occur on the same day
+                        JSONArray dates = obj.getJSONArray("Start_Times");
+                        int index = 0;
+
+                        while(index < dates.length()){
+                            Date dateToInvite = (Date)dates.get(index);
+                            if(date.getDate() == dateToInvite.getDate()
+                                    && date.getMonth() == dateToInvite.getMonth()
+                                    && date.getYear() == dateToInvite.getYear()){
+                                invite.getJSONArray("Start_Times").put(dateToInvite);
+                                invite.getJSONArray("End_Times")
+                                        .put(obj.getJSONArray("End_Times").get(index));
+
+
+                            }
+
+                            index++;
+
+                        }
+
+                        //Invite json complete - add to the map
+                        //Wrap the invite one more time, or add it
+                        inviteParent.put(invite.get("Name").toString(), invite);
+                        inviteMap.put(name, inviteParent);
+
+                    }
+                }
+            }
+
+            //Now iterate through this newly made hashmap and write them to a
+            for(String key : inviteMap.keySet()) {
+                String filename = directory + key.replaceAll("^\\\"+|\\\"$","") + ".txt";
+                //System.out.println(filename);
+                File inviteFile = new File(filename);
+                inviteFile.createNewFile();
+                FileWriter inviteWriter = new FileWriter(filename);
+                inviteWriter.write(inviteMap.get(key).toString(4));
+                inviteWriter.close();
+                //System.out.println(key + "is invited to:");
+                //System.out.println(inviteMap.get(key).toString(4));
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error occured when writing invitation:" + e);
+        }
+    }
+
+
 }
