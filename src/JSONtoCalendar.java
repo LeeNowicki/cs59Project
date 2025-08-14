@@ -1,13 +1,17 @@
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
+import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 
 public class JSONtoCalendar extends Application {
     public static void main(String[] args) {
@@ -27,6 +31,14 @@ public class JSONtoCalendar extends Application {
 
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // (4)
         myCalendarSource.getCalendars().addAll(birthdays, holidays);
+
+        Entry entry = new Entry();
+        LocalDateTime ldt = LocalDateTime.of(2025, 8, 16, 10, 20, 0);
+        LocalTime lt = LocalTime.of(ldt.getHour(), ldt.getMinute());
+        entry.changeStartTime(lt);
+        entry.changeEndTime(LocalTime.of(lt.getHour() + 1, lt.getMinute()));
+
+        birthdays.addEntry(entry);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // (5)
 
