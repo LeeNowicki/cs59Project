@@ -36,6 +36,27 @@ public class JSONtoCalendar extends Application {
         launch(args);
     }
 
+    public static void display(String pathname){
+        try {
+            String raw = Files.readString(Path.of(pathname), StandardCharsets.UTF_8);
+            EVENTS = new JSONObject(raw);
+        } catch (RuntimeException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        launch(pathname);
+    }
+
+    public static void display(JSONObject calendar){
+        try {
+            EVENTS = calendar;
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        launch();
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
