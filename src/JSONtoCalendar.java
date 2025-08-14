@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +15,11 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 public class JSONtoCalendar extends Application {
+
+    private static JSONObject EVENTS = new JSONObject();
+
     public static void main(String[] args) {
+
         launch(args);
     }
 
@@ -37,8 +42,15 @@ public class JSONtoCalendar extends Application {
         LocalTime lt = LocalTime.of(ldt.getHour(), ldt.getMinute());
         entry.changeStartTime(lt);
         entry.changeEndTime(LocalTime.of(lt.getHour() + 1, lt.getMinute()));
+        entry.changeStartDate(LocalDate.of(ldt.getYear(), ldt.getMonth(), ldt.getDayOfMonth()));
+        entry.setTitle("Soccer");
+
+        Entry recur = entry.createRecurrence();
+        recur.setRecurrenceRule("FREQ=WEEKLY;BYDAY=MO,TU");
+        recur.setTitle(entry.getTitle());
 
         birthdays.addEntry(entry);
+        birthdays.addEntry(recur);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // (5)
 
