@@ -1,61 +1,73 @@
 {
-    "\"CS\"": {
-        "Type": "Class",
+    "\"Review for ASTR Quiz\"": {
+        "Type": "Study",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Thu Aug 14 01:15:00 EDT 2030"],
-        "Repeat": "Annually",
-        "End_Times": ["Thu Aug 14 18:23:00 EDT 2030"],
-        "Name": "\"CS\""
+        "Start_Times": ["Thu Aug 14 21:00:00 EDT 2025"],
+        "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
+        "Name": "\"Review for ASTR Quiz\""
     },
-    "\"Dentist\"": {
-        "Type": "Appointment",
+    "\"FYT DOC Training\"": {
+        "Type": "FYT",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Wed Aug 20 03:03:00 EDT 2025"],
-        "End_Times": ["Wed Aug 20 04:05:00 EDT 2025"],
-        "Name": "\"Dentist\""
+        "Start_Times": ["Fri Aug 15 03:30:00 EDT 2025"],
+        "End_Times": ["Fri Aug 15 05:00:00 EDT 2025"],
+        "Name": "\"FYT DOC Training\""
+    },
+    "\"EARS 5\"": {
+        "Type": "Class",
+        "RepeatDay": [
+            2,
+            4
+        ],
+        "invitees": [],
+        "Start_Times": ["Tue Aug 12 10:10:00 EDT 2025"],
+        "Repeat": "Weekly",
+        "End_Times": ["Tue Aug 12 12:00:00 EDT 2025"],
+        "Name": "\"EARS 5\""
+    },
+    "\"Check Credit Cards\"": {
+        "Type": "Finance",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Fri Aug 22 14:00:00 EDT 2025"],
+        "Repeat": "Monthly",
+        "End_Times": ["Fri Aug 22 15:00:00 EDT 2025"],
+        "Name": "\"Check Credit Cards\""
     },
     "\"CS59\"": {
         "Type": "Class",
-        "RepeatDay": [],
+        "RepeatDay": [
+            2,
+            4
+        ],
         "invitees": [],
-        "Start_Times": ["Sat Sep 20 12:03:00 EDT 2025"],
-        "Repeat": "Monthly",
-        "End_Times": ["Sat Sep 20 14:43:00 EDT 2025"],
+        "Start_Times": ["Thu Aug 14 14:25:00 EDT 2025"],
+        "Repeat": "Every",
+        "End_Times": ["Thu Aug 14 16:15:00 EDT 2025"],
         "Name": "\"CS59\""
     },
-    "\"Arabic\"": {
+    "\"ASTR 2\"": {
         "Type": "Class",
         "RepeatDay": [
-            2,
+            1,
             3,
-            0
+            4
         ],
         "invitees": [],
-        "Start_Times": [
-            "Thu Aug 14 02:30:00 EDT 2025",
-            "Thu Aug 14 05:50:00 EDT 2025"
-        ],
-        "Repeat": "Biweekly",
-        "End_Times": [
-            "Thu Aug 14 03:30:00 EDT 2025",
-            "Thu Aug 14 06:50:00 EDT 2025"
-        ],
-        "Name": "\"Arabic\""
-    },
-    "\"Soccer\"": {
-        "Type": "Sport",
-        "RepeatDay": [
-            4,
-            2,
-            3,
-            6
-        ],
-        "invitees": [],
-        "Start_Times": ["Thu Aug 14 09:00:00 EDT 2025"],
+        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
         "Repeat": "Every",
-        "End_Times": ["Thu Aug 14 10:00:00 EDT 2025"],
-        "Name": "\"Soccer\""
+        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
+        "Name": "\"ASTR 2\""
+    },
+    "\"Rah\"": {
+        "Type": "Music",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Thu Aug 14 20:00:00 EDT 2025"],
+        "Repeat": "Weekly",
+        "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
+        "Name": "\"Rah\""
     }
 }

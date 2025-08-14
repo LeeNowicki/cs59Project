@@ -1,0 +1,18 @@
+Class "ASTR 2" 11:30 - 11:35 8/11/2025
+Repeat "ASTR 2" Every Monday and Wednesday and Thursday
+Class "EARS 5" 10:10 - 12:00 Aug 12 2025
+Repeat "EARS 5" Weekly Tuesday and Thursday
+Class "CS59" 14:25 to 16:15
+Repeat "CS59" Every Tuesday and Thursday
+FYT "FYT DOC Training" 03:30 8/15/2025
+Extend "FYT DOC Training" 8/15/2025 30 mins
+Frat "Execs" 09:15 9/12/2025
+Study "Review for ASTR Quiz" 21:00 - 22:00
+Music "Rah" 20:00 to 22:00
+Repeat "Rah" Weekly
+Reminder "Get Laundry" 15:00
+Reminder "Message Josh" 20:00
+Reminder "Apply to jobs" 8/16/2025
+Finance "Check Credit Cards" 14:00 8/22/2025
+Repeat "Check Credit Cards" Monthly
+Cancel "Execs"
