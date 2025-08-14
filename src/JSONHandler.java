@@ -200,7 +200,8 @@ public class JSONHandler {
 
             //Now iterate through this newly made hashmap and write them to a
             for(String key : inviteMap.keySet()) {
-                String filename = directory + key.replaceAll("^\\\"+|\\\"$","") + ".txt";
+                //have to cut out the escaped double quotes in the names
+                String filename = directory + key.replaceAll("^\\\"+|\\\"$","") + ".json";
                 //System.out.println(filename);
                 File inviteFile = new File(filename);
                 inviteFile.createNewFile();
