@@ -1,5 +1,6 @@
 import org.json.*;
 
+import java.io.FileWriter;
 import java.util.Date;
 import java.util.HashMap;
 // TODO: Write other handlers for reminders and invites and have them also get zipped up
@@ -116,5 +117,17 @@ public class JSONHandler {
 
     public static void printAll() {
         System.out.println(makeObject().toString(4));
+    }
+
+    public static void printFile(String filename) {
+        try{
+            FileWriter jsonWriter = new FileWriter(filename);
+            jsonWriter.write(makeObject().toString(4));
+            jsonWriter.close();
+        }
+        catch (Exception e){
+            System.out.println("Error occured when writing to file:" + e);
+        }
+
     }
 }
