@@ -9,22 +9,32 @@ import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 
 public class JSONtoCalendar extends Application {
 
     private static JSONObject EVENTS = new JSONObject();
 
     public static void main(String[] args) {
-
+        try {
+            String raw = Files.readString(Path.of(args[0]), StandardCharsets.UTF_8);
+            EVENTS = new JSONObject(raw);
+        } catch (RuntimeException | IOException e) {
+            throw new RuntimeException(e);
+        }
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        System.out.println(EVENTS);
 
         CalendarView calendarView = new CalendarView(); // (1)
 
