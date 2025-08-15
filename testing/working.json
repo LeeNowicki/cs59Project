@@ -61,6 +61,17 @@
         "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
         "Name": "\"ASTR 2\""
     },
+    "\"Execs\"": {
+        "Type": "Frat",
+        "RepeatDay": [],
+        "invitees": [[
+            "\"Jason\"",
+            "Tue Aug 12 20:42:00 EDT 2025"
+        ]],
+        "Start_Times": ["Fri Sep 12 09:15:00 EDT 2025"],
+        "End_Times": ["Fri Sep 12 10:15:00 EDT 2025"],
+        "Name": "\"Execs\""
+    },
     "\"Rah\"": {
         "Type": "Music",
         "RepeatDay": [],

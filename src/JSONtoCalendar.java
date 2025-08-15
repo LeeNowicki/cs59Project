@@ -32,7 +32,7 @@ public class JSONtoCalendar extends Application {
         } catch (RuntimeException | IOException e) {
             throw new RuntimeException(e);
         }
-        launch(args);
+        launch();
     }
 
     @Override

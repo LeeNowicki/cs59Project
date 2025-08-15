@@ -14,13 +14,12 @@
         <!-- Java toolchain level -->
         <maven.compiler.release>17</maven.compiler.release>
 
-        <!-- Versions in one place -->
+        <!-- Versions -->
         <javafx.version>24.0.1</javafx.version>
         <calendarfx.version>11.12.7</calendarfx.version>
         <orgjson.version>20250517</orgjson.version>
         <antlr4.version>4.13.1</antlr4.version>
 
-        <!-- Ensure reproducible, UTF-8 builds -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -32,7 +31,7 @@
             <version>${calendarfx.version}</version>
         </dependency>
 
-        <!-- JavaFX modules used by the app (the plugin resolves OS classifiers) -->
+        <!-- JavaFX modules used by the app -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -44,14 +43,13 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- org.json for simple JSON handling -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${orgjson.version}</version>
         </dependency>
 
-        <!-- ANTLR runtime only (you already generate sources into /gen) -->
+        <!-- ANTLR runtime -->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
