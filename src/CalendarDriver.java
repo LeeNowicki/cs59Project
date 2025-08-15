@@ -22,6 +22,7 @@ public class CalendarDriver {
             System.out.println(index + ") Export the current Calendar to a JSON file");index++;
             System.out.println(index + ") Display the calendar that got loaded");index++;
             System.out.println(index + ") Display a calendar from a JSON file");index++;
+            System.out.println(index + ") Export the invitations from the currently loaded calendar");index++;
             System.out.println("q) quit the program");
 
             String selection = input.nextLine();
@@ -76,6 +77,20 @@ public class CalendarDriver {
                 try {
 
                     JSONtoCalendar.display(pathname);
+                }
+                catch (Exception e){
+                    System.out.println("Something went wrong when reading the file:" + e);
+                }
+
+            }
+            else if (selection.equals("6")){
+                System.out.println("What directory do you want the invites to go in?");
+                System.out.println("(Don't forget the ending /)");
+                String pathname = input.nextLine();
+
+                try {
+                    JSONHandler.printInviteFiles(pathname);
+
                 }
                 catch (Exception e){
                     System.out.println("Something went wrong when reading the file:" + e);
