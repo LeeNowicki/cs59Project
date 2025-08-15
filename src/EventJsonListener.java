@@ -100,24 +100,29 @@ public class EventJsonListener implements CalendarListener {
                     JSONHandler.cancel(eventString);
                 }
             } else if (actionText.equals("Reminder")) {
-                String reminderString = ctx.NAME().toString();
+                String reminderString = ctx.NAME(0).getText();
                 Date date;
                 if (ctx.date() != null && ctx.TIME() != null) {
-                    if (ctx.date().NUMERICDATE() != null) {
-                        date = DateHandler.getFromNumericDate(getDateString(ctx.date()), ctx.TIME().getText());
+                    if (ctx.date().NUMERICDATE() != null) { // if the date is in numeric format
+                        date = DateHandler.getFromNumericDate(ctx.date().getText(), ctx.TIME().getText());
                     } else {
                         date = DateHandler.getFromDate(getDateString(ctx.date()), ctx.TIME().getText());
                     }
                 } else if (ctx.date() != null) {
-                    if (ctx.date().NUMERICDATE() != null) {
-                        date = DateHandler.getFromNumericDate(getDateString(ctx.date()));
+                    if (ctx.date().NUMERICDATE() != null) { // if the date is in numeric format
+                        date = DateHandler.getFromNumericDate(ctx.date().getText());
                     } else {
                         date = DateHandler.getFromDate(getDateString(ctx.date()));
                     }
                 } else {
                     date = DateHandler.getTimeNoDate(ctx.TIME().getText());
                 }
-                ReminderHandler.createReminder(reminderString, date);
+                JSONObject newReminder = new JSONObject();
+                JSONHandler.setSingleObject(newReminder);
+                newReminder.put("Type", "Reminders");
+                newReminder.put("Name", reminderString);
+                newReminder.put("Date", date.toString());
+                JSONHandler.addToMap();
             } else if (actionText.equals("Extend")) {
                 // Pull event by name
                 String eventName = ctx.NAME(0).getText();

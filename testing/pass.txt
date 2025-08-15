@@ -6,7 +6,7 @@ Sport "Soccer Practice" 18:01-18:03 Jun 30 2030
 Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
 Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
 Repeat "Dentist" Monthly
-Invite "Jacob" to "Dentist" on 5/5/1914 stdout
+Invite "Jacob" to "Dentist" on 5/5/1914
 Class "CS59" 16:00 to 18:00
 Class "CS59" 16:00 - 18:00
 Class "CS" 20:00 - 22:00

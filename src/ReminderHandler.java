@@ -7,9 +7,10 @@ public class ReminderHandler {
     private static HashSet<JSONObject> allObjects = new HashSet<>();
 
     public static void createReminder(String reminderString, Date date) {
+        String dateString = date.toString();
         singleObject = new JSONObject();
         singleObject.put("Reminder", reminderString);
-        singleObject.put("Date", date);
+        singleObject.put("Date", dateString);
         allObjects.add(singleObject);
     }
 
