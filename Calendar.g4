@@ -7,11 +7,11 @@ line: keyword '\n';
 keyword: action 
         | event ;
 
-action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
+action: 'Invite' NAME ('to')? NAME ('on')? date
         | 'Repeat' NAME frequency 
         | 'Extend' NAME date duration
         | 'Cancel' NAME (date)?
-        | 'Reminder' NAME (date| date TIME| TIME) (file)?
+        | 'Reminder' NAME (date| date TIME | TIME)
         |
         ;
 
@@ -20,7 +20,7 @@ event: TYPE NAME time (date)? ;
 // When parsing the repeats. We will have two JSONs
 // "Repeat": [Annually, Monthly]
 // "RepeatDay": [0, 3, 4]
-frequency: 'Every' weekday ('and' weekday)*
+frequency: 'Every' (weekday)? ('and' weekday)*
         |'Biweekly' (weekday)? ('and' weekday)*
         |'Annually'
         |'Weekly' (weekday)? ('and' weekday)*

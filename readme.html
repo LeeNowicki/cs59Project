@@ -617,15 +617,224 @@ These are the resulting JSON objects:
 }
 ```
 
+P04 - Release Candidate
+===========
 
+## Design
+
+After significant consideration, out team settled on using <a href=https://github.com/dlsc-software-consulting-gmbh/CalendarFX>calendarFX</a>,
+a java framework based on javaFX. We wrote a `JSONtoCalendar` class that converted out JSON into a calendar we could display.
+We decided to use Maven to access calendarFX from Maven's central repository.
+After this, we wrote a `CalendarDriver` class which can do the following:
+
+- Generate a JSON representing a calendar from a .txt file
+
+- Display a calendar from a JSON file
+
+- Save a generated JSON file to your machine
+
+- Display a loaded JSON file
+
+We intend to add a feature for command line calendar generation in the future.
+
+-----------------
+
+During this final design process, we clarified several design features:
+
+- Each type associated with events will have its own calendar in calendarFX to separate the types
+
+- Events will be generated based on their start and end times, then repeat rules will generate additional calendarFX entries
+
+- Reminders are a special type of event entry which has its own reserved styling
+
+- Invites will be handled by generating a .json file which can then be sent to the invitee allowing them to render the calendar
+
+## Examples
+
+~~~~
+Class "ASTR 2" 11:30 - 11:35 8/11/2025
+Repeat "ASTR 2" Every Monday and Wednesday and Thursday
+Class "EARS 5" 10:10 - 12:00 Aug 12 2025
+Repeat "EARS 5" Weekly Tuesday and Thursday
+Class "CS59" 14:25 to 16:15
+Repeat "CS59" Every Tuesday and Thursday
+FYT "FYT DOC Training" 03:30 8/15/2025
+Extend "FYT DOC Training" 8/15/2025 30 mins
+Frat "Execs" 09:15 9/12/2025
+Study "Review for ASTR Quiz" 21:00 - 22:00
+Music "Rah" 20:00 to 22:00
+Repeat "Rah" Weekly
+Reminder "Get Laundry" 15:00
+Reminder "Message Josh" 20:00
+Reminder "Apply to jobs" 8/16/2025
+Finance "Check Credit Cards" 14:00 8/22/2025
+Repeat "Check Credit Cards" Monthly
+Invite "Jason" to "Execs" on 8/12/2025
+~~~~
+
+------------------
+
+![A screenshot of the above calendar running](./images/jacobcal.png width=600px)
+
+------------------
+
+~~~~
+Event "Coding Sesh" 00:00
+Event "Coding Sesh" 00:15
+Event "Coding Sesh" 00:30
+Event "Coding Sesh" 00:45
+Event "Coding Sesh" 01:00
+Event "Coding Sesh" 01:15
+Event "Coding Sesh" 01:30
+Event "Coding Sesh" 01:45
+Event "Coding Sesh" 02:00
+Event "Coding Sesh" 02:15
+Event "Coding Sesh" 02:30
+Event "Coding Sesh" 02:45
+Event "Coding Sesh" 03:00
+Event "Coding Sesh" 03:15
+Event "Coding Sesh" 03:30
+Event "Coding Sesh" 03:45
+Event "Coding Sesh" 04:00
+Event "Coding Sesh" 04:15
+Event "Coding Sesh" 04:30
+Event "Coding Sesh" 04:45
+Event "Coding Sesh" 05:00
+Event "Coding Sesh" 05:15
+Event "Coding Sesh" 05:30
+Event "Coding Sesh" 05:45
+Event "Coding Sesh" 06:00
+Event "Coding Sesh" 06:15
+Event "Coding Sesh" 06:30
+Event "Coding Sesh" 06:45
+Event "Coding Sesh" 07:00
+Event "Coding Sesh" 07:15
+Event "Coding Sesh" 07:30
+Event "Coding Sesh" 07:45
+Event "Coding Sesh" 08:00
+Event "Coding Sesh" 08:15
+Event "Coding Sesh" 08:30
+Event "Coding Sesh" 08:45
+Event "Coding Sesh" 09:00
+Event "Coding Sesh" 09:15
+Event "Coding Sesh" 09:30
+Event "Coding Sesh" 09:45
+Event "Coding Sesh" 11:00
+Event "Coding Sesh" 11:15
+Event "Coding Sesh" 11:30
+Event "Coding Sesh" 11:45
+Event "Coding Sesh" 12:00
+Event "Coding Sesh" 12:15
+Event "Coding Sesh" 12:30
+Event "Coding Sesh" 12:45
+Event "Coding Sesh" 13:00
+Event "Coding Sesh" 13:15
+Event "Coding Sesh" 13:45
+Event "Coding Sesh" 13:00
+Event "Coding Sesh" 14:00
+Event "Coding Sesh" 14:15
+Event "Coding Sesh" 14:30
+Event "Coding Sesh" 14:45
+Event "Coding Sesh" 15:00
+Event "Coding Sesh" 15:15
+Event "Coding Sesh" 15:30
+Event "Coding Sesh" 15:45
+Event "Coding Sesh" 16:00
+Event "Coding Sesh" 16:15
+Event "Coding Sesh" 16:30
+Event "Coding Sesh" 16:45
+Event "Coding Sesh" 17:00
+Event "Coding Sesh" 17:15
+Event "Coding Sesh" 17:30
+Event "Coding Sesh" 17:45
+Event "Coding Sesh" 18:00
+Event "Coding Sesh" 18:15
+Event "Coding Sesh" 18:30
+Event "Coding Sesh" 18:45
+Event "Coding Sesh" 19:00
+Event "Coding Sesh" 19:15
+Event "Coding Sesh" 19:30
+Event "Coding Sesh" 19:45
+Event "Coding Sesh" 20:00
+Event "Coding Sesh" 20:15
+Event "Coding Sesh" 20:30
+Event "Coding Sesh" 20:45
+Event "Coding Sesh" 21:00
+Event "Coding Sesh" 21:15
+Event "Coding Sesh" 21:30
+Event "Coding Sesh" 21:45
+Event "Coding Sesh" 22:00
+Event "Coding Sesh" 22:15
+Event "Coding Sesh" 22:30
+Event "Coding Sesh" 22:45
+Event "Coding Sesh" 23:00
+Event "Coding Sesh" 23:15
+Event "Coding Sesh" 23:30
+Event "Coding Sesh" 23:45
+Repeat "Coding Sesh" Every
+~~~~
+
+------------------
+
+![A screenshot of the above calendar running](./images/stresstest.png width=600px)
+
+------------------
+
+~~~~
+Class "Geography" 16:30 - 18:20 8/14/2025
+Class "Geography" 16:30 - 18:20 8/12/2025
+Repeat "Geography" Weekly
+Reminder "Wake Up" Sep 4 2025 08:00
+Birthdays "Will Kelloggs Birthday" 00:00 - 01:00 Aug 20 2025
+Birthdays "Henry Stauchs Birthday" 00:00 - 01:00 Apr 17 2025
+Repeat "Will Kelloggs Birthday" Annually
+Repeat "Henry Stauchs Birthday" Every
+Birthdays "Dads Birthday" 00:00 - 01:00 Aug 28 2025
+Repeat "Dads Birthday" Annually
+Class "CS59" 14:25 to 16:15 8/14/2025
+Class "CS59" 14:25 to 16:15 8/12/2025
+Repeat "CS59" Weekly
+Class "Feminist Queer Zones" 12:50 to 13:55 8/13/2025
+Repeat "Feminist Queer Zones" Weekly
+Extend "Feminist Queer Zones" 8/13/2025 1 hours
+Cancel "CS59" 8/12/2025
+Music "Rah" 20:00 to 22:00 8/14/2025
+Repeat "Rah" Weekly Tuesday and Thursday
+Music "Reverse Rah" 22:00 - 20:00 8/15/2025
+Cancel "Rah"
+~~~~
+
+------------------
+
+![A screenshot of the above calendar running](./images/henrycal.png width=600px)
+
+------------------
+
+Additional tests can be found in our `testing` folder.
+
+-----------------
+
+Known Issues:
+- Repeating an event then attempting a cancel on a date where the event will be as a result of the repeat will fail as the parser does not perform the operations for repeating
+
+- Similarly, attempting to extend a repeated event fails if referencing by a repeated date
+
+- In the future, we want to replace listener generation with visitor generation to separate syntax errors from semantic errors
+
+- New Lines result in an error because they are parsed
 
 
 Meeting & Approval dates
 ================
-We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
-We met on 7/23/2025 to begin writing a real grammar structure
-We met on 7/30/2025 to generate our Parser and update our grammar
-We met on 8/5, 8/6 and 8/7/2025 to write our translator
+- We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
+
+- We met on 7/23/2025 to begin writing a real grammar structure
+
+- We met on 7/30/2025 to generate our Parser and update our grammar
+
+- We met on 8/5, 8/6 and 8/7/2025 to write our translator
+
+- We met on 8/13 and 8/14 to write out Calendar renderer
 
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->

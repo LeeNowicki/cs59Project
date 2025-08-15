@@ -9,6 +9,7 @@ import org.json.*;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 
 public class ParserDriver {
@@ -59,5 +60,19 @@ public class ParserDriver {
         }
 
         JSONHandler.printAll();
+        JSONHandler.printInviteFiles("testing/invites/");
+
+        try {
+            //writes to jsonFile, change pathname to take from args or something if required
+            String pathname = "testing/working.json";
+            File jsonFile = new File(pathname);
+            jsonFile.createNewFile();
+
+            JSONHandler.printFile(pathname);
+
+        }
+        catch (Exception e){
+            System.out.println("Exception occured during file creation: " + e);
+        }
     };
 }

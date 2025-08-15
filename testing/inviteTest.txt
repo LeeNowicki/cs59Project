@@ -1,0 +1,7 @@
+Class "CS" 15:00 8/14/2025
+Class "CS" 15:00 8/15/2025
+Class "Crews" 20:00 8/14/2025
+Invite "Bacus" to "CS" on 8/14/2025
+Invite "Henry" to "CS" on 8/14/2025
+Invite "Bacus" to "Crews" on 8/14/2025
+Invite "Henry" to "CS" on 8/15/2025
