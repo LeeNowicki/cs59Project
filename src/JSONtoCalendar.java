@@ -101,8 +101,8 @@ public class JSONtoCalendar extends Application {
 
                 JSONArray startTimes = event.getJSONArray("Start_Times");
                 JSONArray endTimes = event.getJSONArray("End_Times");
-                Date currStart = new Date(startTimes.getString(i));
-                Date currEnd = new Date(endTimes.getString(i));
+                Date currStart = new Date(startTimes.get(i).toString());
+                Date currEnd = new Date(endTimes.get(i).toString());
 
 
                 LocalDate calDateStart = LocalDate.of(currStart.getYear() + 1900, currStart.getMonth() + 1, currStart.getDate());
