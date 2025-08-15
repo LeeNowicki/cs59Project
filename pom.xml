@@ -59,7 +59,6 @@
 
     <build>
         <plugins>
-            <!-- Make Maven treat your non-standard folders as proper source roots -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -74,8 +73,8 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src</source>   <!-- your blue "src" -->
-                                <source>gen</source>   <!-- your blue "gen" (generated) -->
+                                <source>src</source>
+                                <source>gen</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -88,14 +87,14 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>testing</source> <!-- your test folder -->
+                                <source>testing</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Java compilation level -->
+            <!-- Java compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -105,19 +104,16 @@
                 </configuration>
             </plugin>
 
-            <!-- Run with: mvn javafx:run  (set your actual main class below) -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <!-- If you have no package, just the class name is fine. Update if needed. -->
                     <mainClass>JSONToCalendar</mainClass>
                 </configuration>
             </plugin>
         </plugins>
 
-        <!-- Include non-code assets (e.g., images) in the jar if you load them as resources -->
         <resources>
             <resource>
                 <directory>images</directory>
@@ -125,7 +121,6 @@
                     <include>**/*</include>
                 </includes>
             </resource>
-            <!-- Keep default src/main/resources too, in case you add it later -->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>

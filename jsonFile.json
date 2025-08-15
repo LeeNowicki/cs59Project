@@ -12,6 +12,14 @@
         "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
         "Name": "\"Review for ASTR Quiz\""
     },
+    "\"FYT DOC Training\"": {
+        "Type": "FYT",
+        "RepeatDay": [],
+        "invitees": [],
+        "Start_Times": ["Fri Aug 15 03:30:00 EDT 2025"],
+        "End_Times": ["Fri Aug 15 05:00:00 EDT 2025"],
+        "Name": "\"FYT DOC Training\""
+    },
     "\"EARS 5\"": {
         "Type": "Class",
         "RepeatDay": [
@@ -38,23 +46,6 @@
         "End_Times": ["Fri Aug 22 15:00:00 EDT 2025"],
         "Name": "\"Check Credit Cards\""
     },
-    "\"Rah\"": {
-        "Type": "Music",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Thu Aug 14 20:00:00 EDT 2025"],
-        "Repeat": "Weekly",
-        "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
-        "Name": "\"Rah\""
-    },
-    "\"FYT DOC Training\"": {
-        "Type": "FYT",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Fri Aug 15 03:30:00 EDT 2025"],
-        "End_Times": ["Fri Aug 15 05:00:00 EDT 2025"],
-        "Name": "\"FYT DOC Training\""
-    },
     "\"CS59\"": {
         "Type": "Class",
         "RepeatDay": [
@@ -66,22 +57,6 @@
         "Repeat": "Every",
         "End_Times": ["Thu Aug 14 16:15:00 EDT 2025"],
         "Name": "\"CS59\""
-    },
-    "\"ASTR 4\"": {
-        "Type": "Classs",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
-        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
-        "Name": "\"ASTR 4\""
-    },
-    "\"ASTR 3\"": {
-        "Type": "Classss",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
-        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
-        "Name": "\"ASTR 3\""
     },
     "\"ASTR 2\"": {
         "Type": "Class",
@@ -98,42 +73,27 @@
     },
     "\"Apply to jobs\"": {
         "Type": "Reminders",
-        "Date": "Sat Aug 16 21:22:00 EDT 2025",
+        "Date": "Sat Aug 16 21:08:00 EDT 2025",
         "Name": "\"Apply to jobs\""
-    },
-    "\"ASTR 7\"": {
-        "Type": "Classsssss",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
-        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
-        "Name": "\"ASTR 7\""
     },
     "\"Execs\"": {
         "Type": "Frat",
         "RepeatDay": [],
         "invitees": [[
             "\"Jason\"",
-            "Tue Aug 12 21:22:00 EDT 2025"
+            "Tue Aug 12 21:08:00 EDT 2025"
         ]],
         "Start_Times": ["Fri Sep 12 09:15:00 EDT 2025"],
         "End_Times": ["Fri Sep 12 10:15:00 EDT 2025"],
         "Name": "\"Execs\""
     },
-    "\"ASTR 6\"": {
-        "Type": "Classssss",
+    "\"Rah\"": {
+        "Type": "Music",
         "RepeatDay": [],
         "invitees": [],
-        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
-        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
-        "Name": "\"ASTR 6\""
-    },
-    "\"ASTR 5\"": {
-        "Type": "Classsss",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Mon Aug 11 11:30:00 EDT 2025"],
-        "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
-        "Name": "\"ASTR 5\""
+        "Start_Times": ["Thu Aug 14 20:00:00 EDT 2025"],
+        "Repeat": "Weekly",
+        "End_Times": ["Thu Aug 14 22:00:00 EDT 2025"],
+        "Name": "\"Rah\""
     }
 }

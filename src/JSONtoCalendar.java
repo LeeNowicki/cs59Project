@@ -62,19 +62,25 @@ public class JSONtoCalendar extends Application {
 
         HashMap<String, Calendar> types = new HashMap<>();
 
-        int style = 0;
+        int style = 1;
         for (String key : EVENTS.keySet()) {
             JSONObject event = EVENTS.getJSONObject(key);
             if (!types.containsKey(event.getString("Type"))) {
                 String type = event.getString("Type");
                 Calendar newCal = new Calendar(type);
-                newCal.setStyle(Calendar.Style.getStyle(style));
+
+                if (type.equals("Reminders")) {
+                    newCal.setStyle(Calendar.Style.STYLE1);
+                } else {
+                    newCal.setStyle(Calendar.Style.getStyle(style));
+                    style++;
+                    if (style == 7) {
+                        style = 1;
+                    }
+                }
+
                 types.put(type, newCal);
 
-                style++;
-                if (style == 8) {
-                    style = 0;
-                }
             }
             Calendar currCal = types.get(event.getString("Type"));
             if (event.getString("Type").equals("Reminders")) {

@@ -16,3 +16,8 @@ Reminder "Apply to jobs" 8/16/2025
 Finance "Check Credit Cards" 14:00 8/22/2025
 Repeat "Check Credit Cards" Monthly
 Invite "Jason" to "Execs" on 8/12/2025
+Classs "ASTR 4" 11:30 - 11:35 8/11/2025
+Classss "ASTR 3" 11:30 - 11:35 8/11/2025
+Classsss "ASTR 5" 11:30 - 11:35 8/11/2025
+Classssss "ASTR 6" 11:30 - 11:35 8/11/2025
+Classsssss "ASTR 7" 11:30 - 11:35 8/11/2025
