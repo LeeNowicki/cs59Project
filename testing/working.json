@@ -1,4 +1,9 @@
 {
+    "\"Message Josh\"": {
+        "Type": "Reminders",
+        "Date": "Thu Aug 14 20:00:00 EDT 2025",
+        "Name": "\"Message Josh\""
+    },
     "\"Review for ASTR Quiz\"": {
         "Type": "Study",
         "RepeatDay": [],
@@ -27,6 +32,11 @@
         "End_Times": ["Tue Aug 12 12:00:00 EDT 2025"],
         "Name": "\"EARS 5\""
     },
+    "\"Get Laundry\"": {
+        "Type": "Reminders",
+        "Date": "Thu Aug 14 15:00:00 EDT 2025",
+        "Name": "\"Get Laundry\""
+    },
     "\"Check Credit Cards\"": {
         "Type": "Finance",
         "RepeatDay": [],
@@ -35,11 +45,6 @@
         "Repeat": "Monthly",
         "End_Times": ["Fri Aug 22 15:00:00 EDT 2025"],
         "Name": "\"Check Credit Cards\""
-    },
-    "\"Get Laundry\"": {
-        "Type": "Reminders",
-        "Date": "Sun Aug 10 12:00:00 EDT 2025",
-        "Name": "\"Get Laundry\""
     },
     "\"CS59\"": {
         "Type": "Class",
@@ -65,6 +70,11 @@
         "Repeat": "Every",
         "End_Times": ["Mon Aug 11 11:35:00 EDT 2025"],
         "Name": "\"ASTR 2\""
+    },
+    "\"Apply to jobs\"": {
+        "Type": "Reminders",
+        "Date": "Sat Aug 16 19:55:00 EDT 2025",
+        "Name": "\"Apply to jobs\""
     },
     "\"Rah\"": {
         "Type": "Music",

@@ -63,7 +63,7 @@ public class JSONtoCalendar extends Application {
                 Date startDate = new Date(event.getString("Date"));
                 LocalDate calStartDate = LocalDate.of(startDate.getYear() + 1900, startDate.getMonth() + 1, startDate.getDate());
                 LocalTime localStartTime = LocalTime.of(startDate.getHours(), startDate.getMinutes());
-                LocalTime localEndTime = LocalTime.of(startDate.getHours(), startDate.getMinutes() + 15);
+                LocalTime localEndTime = localStartTime.plusMinutes(15);
 
                 currEntry.changeStartDate(calStartDate);
                 currEntry.changeEndDate(calStartDate);
