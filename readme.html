@@ -617,15 +617,106 @@ These are the resulting JSON objects:
 }
 ```
 
+P04 - Release Candidate
+===========
 
+## Design
+
+After significant consideration, out team settled on using <a href=https://github.com/dlsc-software-consulting-gmbh/CalendarFX>calendarFX</a>,
+a java framework based on javaFX. We wrote a ```JSONtoCalendar``` class that converted out JSON into a calendar we could display.
+We decided to use Maven to access calendarFX from Maven's central repository.
+After this, we wrote a ```CalendarDriver``` class which can do the following:
+
+- Generate a JSON representing a calendar from a .txt file
+
+- Display a calendar from a JSON file
+
+- Save a generated JSON file to your machine
+
+- Display a loaded JSON file
+
+We intend to add a feature for command line calendar generation in the future.
+
+-----------------
+
+During this final design process, we clarified several design features:
+
+- Each type associated with events will have its own calendar in calendarFX to separate the types
+
+- Events will be generated based on their start and end times, then repeat rules will generate additional calendarFX entries
+
+- Reminders are a special type of event entry which has its own reserved styling
+
+- Invites will be handled by generating a .json file which can then be sent to the invitee allowing them to render the calendar
+
+## Examples
+
+~~~~
+Class "ASTR 2" 11:30 - 11:35 8/11/2025
+Repeat "ASTR 2" Every Monday and Wednesday and Thursday
+Class "EARS 5" 10:10 - 12:00 Aug 12 2025
+Repeat "EARS 5" Weekly Tuesday and Thursday
+Class "CS59" 14:25 to 16:15
+Repeat "CS59" Every Tuesday and Thursday
+FYT "FYT DOC Training" 03:30 8/15/2025
+Extend "FYT DOC Training" 8/15/2025 30 mins
+Frat "Execs" 09:15 9/12/2025
+Study "Review for ASTR Quiz" 21:00 - 22:00
+Music "Rah" 20:00 to 22:00
+Repeat "Rah" Weekly
+Reminder "Get Laundry" 15:00
+Reminder "Message Josh" 20:00
+Reminder "Apply to jobs" 8/16/2025
+Finance "Check Credit Cards" 14:00 8/22/2025
+Repeat "Check Credit Cards" Monthly
+Invite "Jason" to "Execs" on 8/12/2025
+~~~~
+
+------------------
+
+![A screenshot of the above calendar running](./images/jacobcal.png width=600px)
+
+------------------
+
+~~~~
+~~~~
+
+------------------
+
+![A screenshot of some subtree queries](./images/subtree.png width=600px)
+
+------------------
+
+~~~~
+~~~~
+
+------------------
+
+![A screenshot of some subtree queries](./images/subtree.png width=600px)
+
+------------------
+
+Known Issues:
+- Repeating an event then attempting a cancel on a date where the event will be as a result of the repeat will fail as the parser does not perform the operations for repeating
+
+- Similarly, attempting to extend a repeated event fails if referencing by a repeated date
+
+- In the future, we want to replace listener generation with visitor generation to separate syntax errors from semantic errors
+
+- New Lines result in an error because they are parsed
 
 
 Meeting & Approval dates
 ================
-We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
-We met on 7/23/2025 to begin writing a real grammar structure
-We met on 7/30/2025 to generate our Parser and update our grammar
-We met on 8/5, 8/6 and 8/7/2025 to write our translator
+- We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
+
+- We met on 7/23/2025 to begin writing a real grammar structure
+
+- We met on 7/30/2025 to generate our Parser and update our grammar
+
+- We met on 8/5, 8/6 and 8/7/2025 to write our translator
+
+- We met on 8/13 and 8/14 to write out Calendar renderer
 
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
