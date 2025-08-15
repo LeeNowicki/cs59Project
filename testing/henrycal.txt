@@ -1,0 +1,21 @@
+Class "Geography" 16:30 - 18:20 8/14/2025
+Class "Geography" 16:30 - 18:20 8/12/2025
+Repeat "Geography" Weekly
+Reminder "Wake Up" Sep 4 2025 08:00
+Birthdays "Will Kelloggs Birthday" 00:00 - 01:00 Aug 20 2025
+Birthdays "Henry Stauchs Birthday" 00:00 - 01:00 Apr 17 2025
+Repeat "Will Kelloggs Birthday" Annually
+Repeat "Henry Stauchs Birthday" Every
+Birthdays "Dads Birthday" 00:00 - 01:00 Aug 28 2025
+Repeat "Dads Birthday" Annually
+Class "CS59" 14:25 to 16:15 8/14/2025
+Class "CS59" 14:25 to 16:15 8/12/2025
+Repeat "CS59" Weekly
+Class "Feminist Queer Zones" 12:50 to 13:55 8/13/2025
+Repeat "Feminist Queer Zones" Weekly
+Extend "Feminist Queer Zones" 8/13/2025 1 hours
+Cancel "CS59" 8/12/2025
+Music "Rah" 20:00 to 22:00 8/14/2025
+Repeat "Rah" Weekly Tuesday and Thursday
+Music "Reverse Rah" 22:00 - 20:00 8/15/2025
+Cancel "Rah"

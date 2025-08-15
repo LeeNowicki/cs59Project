@@ -272,6 +272,9 @@ public class EventJsonListener implements CalendarListener {
                 endTime = DateHandler.getDefaultEndTime(startTime);
             }
 
+            if (startTime.after(endTime)) {
+                throw new ParseCancellationException();
+            }
             JSONHandler.addStartTime(startTime);
             JSONHandler.addEndTime(endTime);
         }
