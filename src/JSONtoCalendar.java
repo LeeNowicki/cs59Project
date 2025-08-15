@@ -33,7 +33,7 @@ public class JSONtoCalendar extends Application {
         } catch (RuntimeException | IOException e) {
             throw new RuntimeException(e);
         }
-        launch(args);
+        launch();
     }
 
     public static void display(String pathname){

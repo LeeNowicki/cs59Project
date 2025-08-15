@@ -15,4 +15,4 @@ Reminder "Message Josh" 20:00
 Reminder "Apply to jobs" 8/16/2025
 Finance "Check Credit Cards" 14:00 8/22/2025
 Repeat "Check Credit Cards" Monthly
-Cancel "Execs"
+Invite "Jason" to "Execs" on 8/12/2025
