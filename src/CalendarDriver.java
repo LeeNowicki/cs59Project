@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CalendarDriver {
@@ -44,6 +45,26 @@ public class CalendarDriver {
             //Load a calendar from inputs
             else if (selection.equals("2")){
                 // TODO: string up a bunch of inputs and parse them
+                System.out.println("Write out what you want to input to the calendar");
+                System.out.println("Input q on a line by itself to quit");
+                ArrayList<String> toparse = new ArrayList<>();
+
+                String line ;
+
+                while (true) {
+                    line = input.nextLine();
+
+                    if(line.equals("q")){
+                        break;
+                    }
+
+                    line+= "\n";
+                    toparse.add(line);
+                }
+
+                //System.out.println(toparse);
+
+                parseCalendarArray(toparse);
             }
             //Export the current calendar to a JSON file
             else if (selection.equals("3")){
@@ -115,6 +136,47 @@ public class CalendarDriver {
             String l;
             while ((l = fileStream.readLine()) != null) {
                 l += "\n"; //add back the newline - it matters for the parser
+
+                CharStream input = CharStreams.fromString(l);
+
+                //Exception stuff taken from: https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
+                CalendarLexer lexer = new CalendarLexer(input);
+                lexer.removeErrorListeners();
+                lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                CalendarParser parser = new CalendarParser(tokens);
+                parser.removeErrorListeners();
+                parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+                EventJsonListener eventListener = new EventJsonListener();
+                parser.removeParseListeners();
+                parser.addParseListener(eventListener);
+
+                try {
+                    //JSONHandler.createThisObject(); // now does this upon entering start instead
+                    parser.start();
+
+
+                    //JSONHandler.printAll();
+                } catch (ParseCancellationException e) {
+                    System.out.print("Line does not match syntax: " + l);
+                    System.out.println(e.getMessage());
+                }
+                //catch(Exception e){System.out.println("Runtime error on line: " +l);System.out.println("Error details:" + e);}
+            }
+        }
+        catch (Exception e){
+            System.out.println("Something went wrong when parsing" + toParse + ": " +e);
+        }
+    }
+
+    public static void parseCalendarArray(ArrayList<String> toParse){
+        try {
+
+
+                for(String l : toParse) {
+                //l += "\n"; //add back the newline - it matters for the parser
 
                 CharStream input = CharStreams.fromString(l);
 
