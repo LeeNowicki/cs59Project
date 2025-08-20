@@ -139,7 +139,12 @@ public class JSONHandler {
         try{
             HashMap<String, JSONObject> inviteMap = new HashMap<>();
             for(JSONObject obj : allObjects.values()){
-                JSONArray invitees = obj.getJSONArray("invitees");
+                JSONArray invitees;
+                try {
+                    invitees = obj.getJSONArray("invitees");
+                } catch(Exception e){
+                    invitees = new JSONArray();
+                }
                 if(!invitees.isEmpty()){
                     for(int ind = 0; ind < invitees.length(); ind++){
                         //write to file
