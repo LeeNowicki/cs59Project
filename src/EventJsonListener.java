@@ -82,7 +82,7 @@ public class EventJsonListener implements CalendarListener {
 
     @Override
     public void exitAction(CalendarParser.ActionContext ctx) {
-        if (!ctx.isEmpty()) {
+        if (!ctx.isEmpty() && ctx.getChild(0) != null) {
             ParseTree actionType = ctx.getChild(0);
             String actionText = actionType.getText();
             if (actionText.equals("Cancel")) { // if action word is "cancel"
