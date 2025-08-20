@@ -63,8 +63,12 @@ Music "Guitar Lessons" 14:00-15:00 Feb 4 2024
 Music "Vocal Lessons" 09:00-10:00 March 6 2027
 ~~~~
 
+---------
+
 Once an event has been established, there are 5 different actions which can be performed on it
 these are denoted by the keywords `Invite` `Repeat` `Extend` `Cancel` and `Reminder`
+
+---------
 
 `Invite` allows you to automatically write a JSON to a file with a particular event contained within it.
 `Invite` is of the format:
@@ -73,8 +77,8 @@ these are denoted by the keywords `Invite` `Repeat` `Extend` `Cancel` and `Remin
 Invite "Name" to "NameofEvent" on Date
 ~~~~
 
-- "Name" is an arbitrary name of the person you are inviting, used to name the resulting JSON
-- "NameofEvent" is the name of an event that you have already declared and MUST match an existing event
+- "Name" - an arbitrary name of the person you are inviting, used to name the resulting JSON
+- "NameofEvent" - the name of an event that you have already declared and MUST match an existing event
 - Date - a Numeric or Written date on which the event you are inviting the person occurs. It must match with a day that "NameofEvent" is occuring
 - `to` and `on` are optional words
 
@@ -85,6 +89,7 @@ Invite "Josh" to "Brunch" on 1/13/2024
 Invite "Jason" "Study Session" Aug 14 2024
 ~~~~
 
+---------
 
 `Repeat` allows you to automatically generate repititions of an event at certain times
 `Repeat` has the format:
@@ -93,7 +98,7 @@ Invite "Jason" "Study Session" Aug 14 2024
 Repeat "NameofEvent" frequency
 ~~~~
 
-- "NameofEvent" is the name of an event that you have already declared and MUST match an existing event
+- "NameofEvent" - the name of an event that you have already declared and MUST match an existing event
 - frequency can take several formats:
     - `Every` - on its own this indicates every single day
     - `Every` someWeekday (and someWeekday...) - will repeat every week on the specified day(s)
@@ -114,7 +119,70 @@ Repeat "File taxes" Annually
 Repeat "Workout" Weekly Monday and Tuesday and Wednesday and Thurs and Fri and Saturday and Sun
 ~~~~
 
-`Extend`
+---------
+
+`Extend` allows you to take an extisting event and push back its end time
+`Extend` is written as such:
+
+~~~~
+Extend "NameofEvent" date duration
+~~~~
+
+- "NameofEvent" - the name of an event that you have already declared and MUST match an existing event
+- Date - a Numeric or Written date on which the event you are extending occurs. It must match with a day that "NameofEvent" is occuring
+- duration - someNumber followed by hour(s) or min(s) denoting how long to extend it by
+
+Here are some examples:
+
+~~~~
+Extend "Coffee with friends" 2/3/2024 30 mins
+Extend "Class" Aug 1 2025 1 hour 
+Extend "Coding session" 4/1/2024 20 min
+Extend "Work" 4/25/2025 2 hours
+~~~~
+
+---------
+
+`Cancel` deletes an occurence of an event and is of the following form:
+
+~~~~
+Cancel "NameofEvent" optionalDate
+~~~~
+
+- "NameofEvent" - the name of an event that you have already declared and MUST match an existing event
+- optionalDate - the date of a specific occurence of an event you wish to cancel. If not included, will delete all occurrences of the event
+
+Examples of `Cancel`:
+
+~~~~
+Cancel "Class" 12/25/2025
+Cancel "Work"
+Cancel "Coding Session"
+~~~~
+
+---------
+
+`Reminder` generates a short event in a special group of events on the calendar when it renders.
+`Reminder` has the following format:
+
+~~~~
+Reminder "NameofReminder" (Date or Time or Date Time)
+~~~~
+
+- "NameofReminder" - an arbitrary name to be assigned to the reminder
+- Date - a Numeric or Written date on which the reminder should occur
+- Time - a time of format XX:XX at which the reminder occurs
+- If a time or date is no specified the current time or date will be filled in
+
+Some examples of `Reminder` are:
+
+~~~~
+Reminder "Take out the trash" 12:00
+Reminder "Clean Car" 12/20/2025 08:00
+Reminder "Go Home" 17:00
+Reminder "Get groceries" 12/30/2004
+~~~~
+
 
 Examples
 ==============
