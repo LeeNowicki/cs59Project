@@ -64,7 +64,7 @@ public class JSONHandler {
             int index = 0;
             JSONArray dates = toCancel.getJSONArray("Start_Times");
             while(index < dates.length()){
-                Date dateToCancel = (Date)dates.get(index);
+                Date dateToCancel = new Date(dates.get(index).toString());
                 if(date.getDate() == dateToCancel.getDate()
                         && date.getMonth() == dateToCancel.getMonth()
                         && date.getYear() == dateToCancel.getYear()){
@@ -145,7 +145,7 @@ public class JSONHandler {
                         //write to file
                         // TODO: currently no checks if the specific instance of the event exists
                         String name = invitees.getJSONArray(ind).get(0).toString();
-                        Date date = (Date)invitees.getJSONArray(ind).get(1);
+                        Date date = new Date(invitees.getJSONArray(ind).get(1).toString());
 
                         JSONObject inviteParent = inviteMap.get(name);
 
@@ -169,6 +169,8 @@ public class JSONHandler {
                             invite.put("Name", obj.get("Name"));
                             invite.put("Start_Times", new JSONArray());
                             invite.put("End_Times", new JSONArray());
+                            invite.put("invitees", new JSONArray());
+                            invite.put("RepeatDay", new JSONArray());
                         }
                         //This is for a new event, so we can make a new invite
 
@@ -178,7 +180,7 @@ public class JSONHandler {
                         int index = 0;
 
                         while(index < dates.length()){
-                            Date dateToInvite = (Date)dates.get(index);
+                            Date dateToInvite = new Date(dates.get(index).toString());
                             if(date.getDate() == dateToInvite.getDate()
                                     && date.getMonth() == dateToInvite.getMonth()
                                     && date.getYear() == dateToInvite.getYear()){
