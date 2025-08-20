@@ -53,6 +53,10 @@ public class JSONHandler {
         allObjects.put(singleObject.get("Name").toString(), singleObject);
     }
 
+    public static void addToMap(JSONObject toAdd) {
+        allObjects.put(toAdd.get("Name").toString(), toAdd);
+    }
+
     // TODO: fill out the functions
     public static void cancel(String eventName, Date date){
         JSONObject toCancel = allObjects.get(eventName);
