@@ -35,9 +35,13 @@ To use our project:
 - Run `CalendarDriver.java` with the javaVM options on to inlcude the JavaFX modules `javafx.controls` and `javafx.web`
 - Load an existing JSON, generate a JSON from an existing .txt file, or generate a new JSON from a new .txt file and display it
 
-Key Features
+Architecture
 ==============
+This project uses ANTLR grammar to generate a parser and listener to for our language, which we have then expanded upon to add functionality. Currently, the functionality is used during the parse. 
 
+This parsed language is then used to modify a HashMap of JSON objects indexed by their name for quick lookup and deletion, with each JSON object having the information of the event (including its name, type, and an array of start times and end times), which can be exported or directly displayed. 
+
+The calendar is then displayed, from the JSON file, using the Calendar FX framework. 
 
 
 Documentation
