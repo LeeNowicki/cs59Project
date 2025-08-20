@@ -1,655 +1,123 @@
-**CS59 Project**
+**ScheduleScript**
 
-
-Authors
-=============
+----------------
 
 <!-- Note: wrapping table in div.noheader will hide the table's header -->
 <!-- Note: wrapping table in div.firstcol will style the first column different from other columns -->
 <div class="noheader firstcol">
                   |             
 ------------------|-------------
-Group Members              | Aleksander Nowicki, Jacob Bacus, Henry Stauch
+Authors           | Aleksander Nowicki, Jacob Bacus, Henry Stauch
 </div>
 
+ScheduleScript is a domain specific language (dsl) that allows users to create JSON files which represent calendars.
+Within this repository there is also a `CalendarDriver` class which allows the user to generate these JSON from .txt files, render them
+using CalendarFX (a javaFX framework), and save them.
 
-P00 - Introduction
-================
+Project structure:
+- `src` - code files for generating JSON files, working with these files, and displaying calendars with CalendarFX
+- `Calendar.g4` - grammar file that defines our dsl
+- `gen` - ANTLR lexer and parser output from grammar
+- `images` - images from various tests
+- `testing` - several example inputs and resulting JSON files
+- `pom.xml` - Maven file for loading packages
 
-Domain
-----------------
-Scheduling and calendar creation. 
+Dependencies:
+- `Java23`
+- `Maven` for loading relevant packages
 
-Problem
-----------------
-It is hard to create and populate a personal calendar, as well as share it with other people.
 
-Valid Inputs
-----------------
-The language will have default keywords and classes built in to the language, with the user having the ability to extend them as necessary. These start with a capital letter, and each line must start with one of them.
+Usage
+==============
+To use our project:
+- Fork this repository
+- Use Maven and `pom.xml` to load the relevant packages for JavaFX, ANTLR, CalendarFX, and java's JSON support
+- Run `CalendarDriver.java` with the javaVM options on to inlcude the JavaFX modules `javafx.controls` and `javafx.web`
+- Load an existing JSON, generate a JSON from an existing .txt file, or generate a new JSON from a new .txt file and display it
 
-The following would be hello world in our language (using the Reminder keyword)
-~~~
-Reminder "Hello World" Now stdout
-~~~
+Key Features
+==============
 
-The language will accept these inputs to populate a calendar
-~~~
-Class 16:00 to 18:00
-Class 1600 to 1800
-Class 1600 - 1800
-Class 4:00 pm - 6 pm
-Class "CS" 16:00 to 18:00
 
-Meeting "Project 19:00 to 21:00
-Invite "Lee" to "Project"
-Repeat "CS" Weekly ## or Biweekly, Annually, etc
-Repeat "CS" Weekly on Tuesday and Thursday
-Repeat "CS" Weekly on Tues and Thurs
 
-Extend "CS" on August 2 1 hour
-Extend "CS" on Aug 2 1 hour
-Extend First "CS" 1 hour
-Cancel "Project" on July 8
-~~~
-
-The output for this would be the events being rendered in the gui component.
-
-The language will not accept these inputs:
-~~~
-Class "Arabic" 19:00 to 25:00 ## Time out of range
-Extend "DNE" on August 2 1 hour ## Reference to event not initialized
-Meeting Party "thing" ## Two keywords used, invalid
-Extend Tenth "Study Session" on July 1 1 hour 
-~~~
-
-Functionality
-----------------
-We will have a GUI component to display the created calendar as well as create a JSON or other format for storing the data on the calendar. 
-
-P01 - Grammar
-================
-We wrote a grammar (in the ANTLR style) that we believe will be able to parse the inputs
-we defined earlier, with some exceptions. 
-
-Rather than immediately dealing with certain complicated RegExs we decided to add these as
-stretch goals for later on in our language. Some of these goals include:
-- Identifying dates of form 1/24/23
-- Increasing the ways to write out weekdays and months
-- Dealing with leap years
-- Accepting non military (am/pm) times
-- Operating on the "First" or "Second" etc. event with a certain "name"
+Documentation
+==============
+The primary components that make up calendars are events. before any action can be performed on an event,
+the event must be initialized. An initialization can be done as such:
 
 ~~~~
-grammar Calendar;
-
-start : line (line)* EOF;
-
-line: keyword '\n'; 
-
-keyword: action 
-        | event ;
-
-action: 'Invite' NAME ('to')? event (file)?
-        | 'Repeat' NAME frequency 
-        | 'Extend' NAME date duration
-        | 'Cancel' NAME (date)?
-        | 'Reminder' NAME (date| date time| time) (file)?
-        |
-        ;
-
-event: ID (NAME)? time (date)? ;
-
-frequency: 'Every' weekday ('and' weekday)*
-        |'Biweekly' (weekday)? ('and' weekday)*
-        |'Annually'
-        |'Weekly' (weekday)? ('and' weekday)*
-        |'Monthly'
-        //etc
-        ;
-weekday: 'Mon'
-    | 'Tues'
-    |'Wed' | 'Wednesday'
-    |'Thurs'
-    |'Fri'
-    |'Sat'
-    |'Sun';
-
-file: 'stdout'; //add others
-
-duration: (INT ('hours'|'min'|'sec'))+;
-
-time: TIME
-    | TIME 'to' TIME
-    |TIME '-' TIME
-    |'now';
-
-
-date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec') THIRTYONE
-    | ('Apr'|'Jun'|'Sep'|'Nov') THIRTY
-    | 'Feb' TWENTYEIGHT
-    |NUMERICDATE;
-
-
-
-NAME :'"'.*'"' ;//Matches double quoted string
-
-ID : [A-Za-z]([A-Za-z0-9])*;
-
-INT: [0-9]([0-9])*;
-        
-THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
-
-THIRTY: ([1-9]|[1-2][0-9]|'30');
-
-TWENTYNINE: ([1-9]|[1-2][0-9]);
-
-TWENTYEIGHT: ([1-9]|[1-2][0-8]);
-
-TIME: ([0-1][0-9]|'2'[0-3])(':')?([0-5][0-9]);
-
-NUMERICDATE: ; //We'll do that later
+EventType "NameofEvent" Time-Time optionalDate
 ~~~~
 
-It will match the inputs of:
+- EventType - can be any single word and determines which grouping the event will be assigned to when the calendar renders.
+- "NameofEvent" - The actual name of the event when rendered. Used as reference later for actions in the language.
+- Time-Time - Each Time is of the format XX:XX and each Time-Time pair should have the first time be smaller
+- optionalDate - Dates have two formats Numeric and Written. Numeric dates are of the form Month/Day/Year. Written dates are of the form Month Date optionalYear
 
-Class 16:00 to 18:00
-
-Class 16:00 - 18:00
-
-along with something along the lines of:
-
-Class "CS" 20:00 - 22:00
-
-where a string identifier is included.
-
-We also support repeats, but with slightly different syntax of: 
-
-Repeat "CS" Weekly
-
-Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
-
-Repeat "CS" Annually
-
-Other supported inputs are:
-
-Extend "CS" Aug 2 1 hour
-
-Extend "CS" Aug 2 2 hour
-
-Cancel "Project" July 8
-
-This grammar should fail to parse all of our given bad inputs as they don't match our patterns.
-
-For the earlier examples:
-
-Class "Arabic" 19:00 to 25:00 ## Time out of range - 25 will not match the '2'[0-3] part of TIME
-
-Extend "DNE" on August 2 1 hour ## Reference to event not initialized - this would be implemented when functionality is added
-
-Meeting Party "thing" ## Two keywords used, invalid  - only one keyword per line 
-
-Extend Tenth "Study Session" on July 1 1 hour - this would also be invalid when functionality is added, if there is no tenth study session on that date
-
-As some additional examples, currently the grammar will not match:
-
-1600 - 2000 "CS Class" ## A line must start with a keyword, and a time cannot be parsed as a keyword
-
-Repeat "CS Class" ## No frequency given
-
-Class "CS Class" 1600-2000 August 32 ## 32 will not match THIRTYONE
-
-
-P02 - Parser
-===============
-
-Since we wrote our original grammar as an ANTLR file, we simply needed to generate our parser and verify our inputs.
-
-Testing our inputs revealed that our grammar had several flaws which needed to be corrected.
-
-- ANTLR was recognizing any date 1-28 as the TWENTYEIGHT terminal. We had written each month to only except the terminal corresponding to the number of days in that month. To fix this, we allowed all months to accept all terminals <= their number of days
-
-- For our extend functionality to work, we needed to accept an INT terminal which we defined as any non-negative number. This became an issue when we realized times without colons would be processed as ints. For now, we only accept times in the 4 digit with colon format with a stretch goal to broaden this acceptance.
-
-- We shifted the priority of terminals so that INT was recognized last and lower terminals like TWENTYEIGHT were recognized first.
-
-- We altered the way we identified our quoted text so that the text was not grouped into the largest possible set of quotes in the input.
-
-- We added different options for weekdays and months that were the full words.
-
-- We added a terminal NUMERICDATE which accepts dates in the form month/day/year using a regex.
-
-After doing this, we revised our test file to include valid and invalid inputs and wrote a driver which is shown running these inputs below.
-
-![Screenshot of test inputs running on driver](./ParserTest1.png width=600px)
-
-
----------
-
-Our inputs:
-
+Here are some basic examples:
 ~~~~
-Appointment "Dentist" 08:00-09:00 5/5/1914
-Extend "Dentist" 5/5/1914 1000 min
-Cancel "Dentist" May 5 1914
-Reminder "Hello World" May 5 1914 05:00
-Sport "Soccer Practice" 18:01-18:03 Jun 30 333333333
-Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
-Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
-Repeat "Dentist" Monthly
-Invite "Jacob" to "Dentist" on 5/5/1914 stdout
-Class 16:00 to 18:00
-Class 16:00 - 18:00
-Class "CS" 20:00 - 22:00
-Repeat "CS" Weekly
-Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
-Repeat "CS" Annually
-Extend "CS" Aug 2 31 hours
-Extend "CS" Aug 2 32 hours
-Cancel "Project" July 8
-Appointment 04:00 May 6
-
-Class "Arabic" 19:00 to 25:00  ## Fails due to invalid time
-Extend "DNE" on August 2 1 hour  ## Fails due to invalid extension keyword
-Meeting Party "thing"  ## Fails due to use of 2 keywork classifications for event
-16:00 - 20:00 "CS Class"  ## Fails due to invalid format of no keyword and time before title
-Repeat "CS Class"  ## Fails due to lack of frequency
-Class "CS Class" 16:00-20:00 August 32  ## Fails due to invalid date
-
+Class "Math" 11:00-13:00
+Class "English" 13:00-15:00 1/23/2025
+Class "Spanish" 08:00-10:00 Jan 2
+Music "Guitar Lessons" 14:00-15:00 Feb 4 2024
+Music "Vocal Lessons" 09:00-10:00 March 6 2027
 ~~~~
 
----------
+Once an event has been established, there are 5 different actions which can be performed on it
+these are denoted by the keywords `Invite` `Repeat` `Extend` `Cancel` and `Reminder`
 
-Out updated grammar:
-
-~~~~
-grammar Calendar;
-
-start : line (line)*;
-
-line: keyword '\n';
-
-keyword: action
-| event ;
-
-action: 'Invite' NAME ('to')? NAME ('on')? date (file)?
-| 'Repeat' NAME frequency
-| 'Extend' NAME date duration
-| 'Cancel' NAME (date)?
-| 'Reminder' NAME (date| date TIME| TIME) (file)?
-|
-;
-
-event: ID (NAME)? time (date)? ;
-
-frequency: 'Every' weekday ('and' weekday)*
-|'Biweekly' (weekday)? ('and' weekday)*
-|'Annually'
-|'Weekly' (weekday)? ('and' weekday)*
-|'Monthly'
-//etc
-;
-weekday: 'Mon' | 'Monday'
-| 'Tues' | 'Tuesday'
-|'Wed' | 'Wednesday'
-|'Thurs' | 'Thursday'
-|'Fri' | 'Friday'
-|'Sat' | 'Saturday'
-|'Sun' | 'Sunday';
-
-file: 'stdout'; //add others
-
-duration: (num ('hours'|'min'|'sec'))+;
-
-time: TIME
-| TIME 'to' TIME
-|TIME '-' TIME;
-
-
-date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec'|'January'|'March'|'May'|'July'|'August'|'October'|'December') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (num)?
-| ('Apr'|'Jun'|'Sep'|'Nov'|'April'|'June'|'Sepember'|'November') (THIRTY|TWENTYEIGHT|TWENTYNINE) (num)?
-| ('Feb'|'February') TWENTYEIGHT (num)?
-//    | ('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) NUMERICYEAR
-//    | ('4/'|'6/'|'9/'|'11/') (THIRTY|TWENTYEIGHT|TWENTYNINE) NUMERICYEAR
-//    | '2/' TWENTYEIGHT NUMERICYEAR;
-| NUMERICDATE;
-
-num: INT | TWENTYNINE | TWENTYEIGHT | THIRTY | THIRTYONE;
-
-NAME :'"'[A-Za-z0-9 ]+'"' ;//Matches double quoted string
-
-ID: [A-Za-z]([A-Za-z0-9])*;
-
-TIME: ([0-1][0-9]|'2'[0-3])(':')([0-5][0-9]);
-//|((([1-9](':')[0-5][0-9])|('1'[0-2](':')[0-5][0-9]))('am'|'AM'|'pm'|'PM')); time in am/pm format is a stretch goal
-
-TWENTYEIGHT: ([1-9]|[1-2][0-8]);
-
-TWENTYNINE: ([1-9]|[1-2][0-9]);
-
-THIRTY: ([1-9]|[1-2][0-9]|'30');
-
-THIRTYONE: ([1-9]|[1-2][0-9]|'3'[0-1]);
-
-NUMERICDATE: ((('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/')[1-9]|[1-2][0-9]|'3'[0-1])|(('4/'|'6/'|'9/'|'11/')[1-9]|[1-2][0-9]|'30')|(('2/')[1-9]|[1-2][0-8]))('/'[0-9][0-9][0-9][0-9]);
-
-INT: [0-9]([0-9])*;
-
-WS: [ \t\r] -> skip;
-~~~~
-
------------
-
-Our driver and error listener:
+`Invite` allows you to automatically write a JSON to a file with a particular event contained within it.
+`Invite` is of the format:
 
 ~~~~
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-public class ParserDriver {
-public static void main(String[] args) throws Exception {
-//BufferedReader fileStream = new BufferedReader(new FileReader("test.txt"));
-
-//Enable this snippet to read the next line and open that file
-//Scanner scanner = new Scanner(System.in);
-//String line = scanner.nextLine();
-//BufferedReader fileStream = new BufferedReader(new FileReader(line));
-
-
-//Alternatively, read from args (May cause errors, no safeguards
-BufferedReader fileStream = new BufferedReader(new FileReader(args[0]));
-
-String l ;
-while((l = fileStream.readLine()) != null){
-l+= "\n"; //add back the newline - it matters for the parser
-
-CharStream input = CharStreams.fromString(l);
-
-//Exception stuff taken from: https://stackoverflow.com/questions/18132078/handling-errors-in-antlr4
-CalendarLexer lexer = new CalendarLexer(input);
-lexer.removeErrorListeners();
-lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-CommonTokenStream tokens = new CommonTokenStream(lexer);
-CalendarParser parser = new CalendarParser(tokens);
-parser.removeErrorListeners();
-parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-try {
-parser.line();
-
-System.out.print("PASS: " + l);
-
-}
-catch(ParseCancellationException e) {
-System.out.print("FAIL: " + l);
-}
-}
-
-
-};
-}
+Invite "Name" to "NameofEvent" on Date
 ~~~~
 
-~~~~
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
+- "Name" is an arbitrary name of the person you are inviting, used to name the resulting JSON
+- "NameofEvent" is the name of an event that you have already declared and MUST match an existing event
+- Date - a Numeric or Written date on which the event you are inviting the person occurs. It must match with a day that "NameofEvent" is occuring
+- `to` and `on` are optional words
 
-public class ThrowingErrorListener extends BaseErrorListener {
-
-public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
-
-
-@Override
-public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
-throws ParseCancellationException {
-throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
-}
-}
+Here are some examples:
 
 ~~~~
+Invite "Josh" to "Brunch" on 1/13/2024
+Invite "Jason" "Study Session" Aug 14 2024
+~~~~
 
-P03 - Translator prototype
-===============
 
-We met on 8/5 to plan/design the translator and output, and met on 8/6 and 8/7 to implement it.
+`Repeat` allows you to automatically generate repititions of an event at certain times
+`Repeat` has the format:
 
-We wrote listener functions (EventJsonListener.java) that generate JSON objects to represent events
-using functions from JSONHandler.
+~~~~
+Repeat "NameofEvent" frequency
+~~~~
 
-We wrote the JSONHandler class to build the event objects
-using <a href="https://github.com/stleary/JSON-java">this JSON handling package for Java</a>, and store
-them in a HashMap.
+- "NameofEvent" is the name of an event that you have already declared and MUST match an existing event
+- frequency can take several formats:
+    - `Every` - on its own this indicates every single day
+    - `Every` someWeekday (and someWeekday...) - will repeat every week on the specified day(s)
+    - `Biweekly` someWeekday (and someWeekday...) - will repeat every week on the specified day(s)
+    - `Weekly someWeekday (and someWeekday...) - will repeat every other week on the specified day(s) starting with day the event first occurs
+    - `Annually` - will repeat on this day every year
+    - `Monthly` - will repeat on this date every month
+    - someWeekday can be the full name of the day or the abbreviation with the first letter capitalized
 
-We wrote a Reminder class that stores reminders similarly - we will implement sending the reminders to
-the user as part of the release candidate.
+Some examples:
 
-The DateHandler class parses dates the user provides and returns Date objects, the type that's contained
-in our JSON objects.
+~~~~
+Repeat "Study" Every
+Repeat "Class" Every Mon and Tues
+Repeat "Rehearsal" Biweekly Monday and Sunday
+Repeat "Make budget" Monthly
+Repeat "File taxes" Annually
+Repeat "Workout" Weekly Monday and Tuesday and Wednesday and Thurs and Fri and Saturday and Sun
+~~~~
 
-Below are some trivial test cases (testing/trivial.txt):
+`Extend`
 
-```
-Appointment "dentist" 12:00
-Appointment "dentist" 15:00 - 20:00
-Appointment "dentist" 12:00 8/6/2025
-Appointment "dentist" 12:00 Aug 5 2025
-Cancel "dentist" 8/5/2025
-Cancel "dentist"
-```
-
-And here are the resulting JSON objects:
-
-```
-{"\"dentist\"": {
-    "Type": "Appointment",
-    "RepeatDay": [],
-    "Start_Times": ["Thu Aug 07 12:00:00 EDT 2025"],
-    "End_Times": ["Thu Aug 07 13:00:00 EDT 2025"],
-    "Name": "\"dentist\""
-}}
-{"\"dentist\"": {
-    "Type": "Appointment",
-    "RepeatDay": [],
-    "Start_Times": [
-        "Thu Aug 07 12:00:00 EDT 2025",
-        "Thu Aug 07 15:00:00 EDT 2025"
-    ],
-    "End_Times": [
-        "Thu Aug 07 13:00:00 EDT 2025",
-        "Thu Aug 07 20:00:00 EDT 2025"
-    ],
-    "Name": "\"dentist\""
-}}
-{"\"dentist\"": {
-    "Type": "Appointment",
-    "RepeatDay": [],
-    "Start_Times": [
-        "Thu Aug 07 12:00:00 EDT 2025",
-        "Thu Aug 07 15:00:00 EDT 2025",
-        "Wed Aug 06 12:00:00 EDT 2025"
-    ],
-    "End_Times": [
-        "Thu Aug 07 13:00:00 EDT 2025",
-        "Thu Aug 07 20:00:00 EDT 2025",
-        "Wed Aug 06 13:00:00 EDT 2025"
-    ],
-    "Name": "\"dentist\""
-}}
-{"\"dentist\"": {
-    "Type": "Appointment",
-    "RepeatDay": [],
-    "Start_Times": [
-        "Thu Aug 07 12:00:00 EDT 2025",
-        "Thu Aug 07 15:00:00 EDT 2025",
-        "Wed Aug 06 12:00:00 EDT 2025",
-        "Tue Aug 05 12:00:00 EDT 2025"
-    ],
-    "End_Times": [
-        "Thu Aug 07 13:00:00 EDT 2025",
-        "Thu Aug 07 20:00:00 EDT 2025",
-        "Wed Aug 06 13:00:00 EDT 2025",
-        "Tue Aug 05 13:00:00 EDT 2025"
-    ],
-    "Name": "\"dentist\""
-}}
-{"\"dentist\"": {
-    "Type": "Appointment",
-    "RepeatDay": [],
-    "Start_Times": [
-        "Thu Aug 07 12:00:00 EDT 2025",
-        "Thu Aug 07 15:00:00 EDT 2025",
-        "Wed Aug 06 12:00:00 EDT 2025"
-    ],
-    "End_Times": [
-        "Thu Aug 07 13:00:00 EDT 2025",
-        "Thu Aug 07 20:00:00 EDT 2025",
-        "Wed Aug 06 13:00:00 EDT 2025"
-    ],
-    "Name": "\"dentist\""
-}}
-{}
-```
-
-These are some less-trivial inputs that are all meant to pass (testing/pass.txt):
-
-```
-Appointment "Dentist" 08:00-09:00 5/5/1914
-Extend "Dentist" 5/5/1914 1000 min
-Cancel "Dentist" May 5 1914
-Reminder "Hello World" May 5 1914 05:00
-Sport "Soccer Practice" 18:01-18:03 Jun 30 333333333
-Repeat "Soccer Practice" Every Thurs and Tues and Wed and Sat
-Repeat "Dentist" Biweekly Sun and Sun and Wednesday and Sunday
-Repeat "Dentist" Monthly
-Invite "Jacob" to "Dentist" on 5/5/1914 stdout
-Class "CS59" 16:00 to 18:00
-Class "CS59" 16:00 - 18:00
-Class "CS" 20:00 - 22:00
-Repeat "CS" Weekly
-Repeat "CS" Biweekly Tuesday and Thursday and Wednesday
-Repeat "CS" Annually
-Extend "CS" Aug 2 31 hours
-Extend "CS" Aug 2 32 hours
-Cancel "Project" July 8
-Appointment "Office Hours" 04:00 May 6
-```
-
-These are the resulting JSON objects:
-
-```
-{
-    "\"Soccer Practice\"": {
-        "Type": "Sport",
-        "RepeatDay": [
-            4,
-            2,
-            3,
-            6
-        ],
-        "invitees": [],
-        "Start_Times": ["Wed Oct 14 03:35:08 EST 251215559"],
-        "Repeat": "Every",
-        "End_Times": ["Wed Oct 14 03:37:08 EST 251215559"],
-        "Name": "\"Soccer Practice\""
-    },
-    "\"CS\"": {
-        "Type": "Class",
-        "RepeatDay": [
-            2,
-            4,
-            3
-        ],
-        "invitees": [],
-        "Start_Times": ["Thu Aug 07 20:00:00 EDT 2025"],
-        "Repeat": "Annually",
-        "End_Times": ["Thu Aug 07 22:00:00 EDT 2025"],
-        "Name": "\"CS\""
-    },
-    "\"Dentist\"": {
-        "Type": "Appointment",
-        "RepeatDay": [
-            0,
-            0,
-            3,
-            0
-        ],
-        "invitees": [[
-        "\"Jacob\"",
-        "Tue May 05 21:00:00 EST 1914"
-        ]],
-        "Start_Times": [],
-        "Repeat": "Monthly",
-        "End_Times": [],
-        "Name": "\"Dentist\""
-    },
-    "\"CS59\"": {
-        "Type": "Class",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": [
-            "Thu Aug 07 16:00:00 EDT 2025",
-            "Thu Aug 07 16:00:00 EDT 2025"
-        ],
-        "End_Times": [
-            "Thu Aug 07 18:00:00 EDT 2025",
-            "Thu Aug 07 18:00:00 EDT 2025"
-        ],
-        "Name": "\"CS59\""
-    },
-    "\"Office Hours\"": {
-        "Type": "Appointment",
-        "RepeatDay": [],
-        "invitees": [],
-        "Start_Times": ["Tue May 06 04:00:00 EDT 2025"],
-        "End_Times": ["Tue May 06 05:00:00 EDT 2025"],
-        "Name": "\"Office Hours\""
-    }
-}
-```
-
-P04 - Release Candidate
-===========
-
-## Design
-
-After significant consideration, out team settled on using <a href=https://github.com/dlsc-software-consulting-gmbh/CalendarFX>calendarFX</a>,
-a java framework based on javaFX. We wrote a `JSONtoCalendar` class that converted out JSON into a calendar we could display.
-We decided to use Maven to access calendarFX from Maven's central repository.
-After this, we wrote a `CalendarDriver` class which can do the following:
-
-- Generate a JSON representing a calendar from a .txt file
-
-- Display a calendar from a JSON file
-
-- Save a generated JSON file to your machine
-
-- Display a loaded JSON file
-
-We intend to add a feature for command line calendar generation in the future.
-
------------------
-
-During this final design process, we clarified several design features:
-
-- Each type associated with events will have its own calendar in calendarFX to separate the types
-
-- Events will be generated based on their start and end times, then repeat rules will generate additional calendarFX entries
-
-- Reminders are a special type of event entry which has its own reserved styling
-
-- Invites will be handled by generating a .json file which can then be sent to the invitee allowing them to render the calendar
-
-## Examples
+Examples
+==============
 
 ~~~~
 Class "ASTR 2" 11:30 - 11:35 8/11/2025
@@ -808,11 +276,9 @@ Cancel "Rah"
 
 ![A screenshot of the above calendar running](./images/henrycal.png width=600px)
 
-------------------
 
-Additional tests can be found in our `testing` folder.
-
------------------
+Issues
+==============
 
 Known Issues:
 - Repeating an event then attempting a cancel on a date where the event will be as a result of the repeat will fail as the parser does not perform the operations for repeating
@@ -822,19 +288,6 @@ Known Issues:
 - In the future, we want to replace listener generation with visitor generation to separate syntax errors from semantic errors
 
 - New Lines result in an error because they are parsed
-
-
-Meeting & Approval dates
-================
-- We met 7/15/2025 and were approved on that date. Our group met on 7/17 to finalize the readme for this milestone.
-
-- We met on 7/23/2025 to begin writing a real grammar structure
-
-- We met on 7/30/2025 to generate our Parser and update our grammar
-
-- We met on 8/5, 8/6 and 8/7/2025 to write our translator
-
-- We met on 8/13 and 8/14 to write out Calendar renderer
 
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
