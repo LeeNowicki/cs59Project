@@ -2,10 +2,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,7 +24,8 @@ public class CalendarDriver {
             System.out.println("Enter the associated number for the action you want:");
             System.out.println(index + ") Load a calendar from new file (.txt)");index++;
             System.out.println(index + ") Add to/Create a calendar from the command line");index++;
-            System.out.println(index + ") Export the current Calendar to a JSON file");index++;
+            System.out.println(index + ") Export the current calendar to a JSON file");index++;
+            System.out.println(index + ") Read into the current calendar from a JSON file");index++;
             System.out.println(index + ") Display the calendar that got loaded");index++;
             System.out.println(index + ") Display a calendar from a JSON file");index++;
             System.out.println(index + ") Export the invitations from the currently loaded calendar");index++;
@@ -85,13 +90,33 @@ public class CalendarDriver {
 
 
             }
+
+            //Loads a JSON into the current calendar
+            else if (selection.equals("4")) {
+                System.out.println("Input the path to the JSON file you want to read from");
+                System.out.println("Be warned that this will overwrite events that share names with the file");
+
+                String pathname = input.nextLine();
+
+                try {
+
+                    String raw = Files.readString(Path.of(pathname), StandardCharsets.UTF_8);
+                    JSONObject toAddParent = new JSONObject(raw);
+                    for(String key : toAddParent.keySet()) {
+                        JSONHandler.addToMap(toAddParent.getJSONObject(key));
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("Something went wrong when reading the file:" + e);
+                }
+            }
             //Display the currently loaded calendar
-            else if (selection.equals("4")){
+            else if (selection.equals("5")){
                 System.out.println("Displaying Current Calendar");
                 JSONtoCalendar.display(JSONHandler.makeObject());
 
             }
-            else if (selection.equals("5")){
+            else if (selection.equals("6")){
                 System.out.println("What JSON file do you want to display?");
                 String pathname = input.nextLine();
 
@@ -104,7 +129,7 @@ public class CalendarDriver {
                 }
 
             }
-            else if (selection.equals("6")){
+            else if (selection.equals("7")){
                 System.out.println("What directory do you want the invites to go in?");
                 System.out.println("(Don't forget the ending /)");
                 String pathname = input.nextLine();

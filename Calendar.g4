@@ -45,7 +45,7 @@ time: TIME
 
 
 date: ('Jan'|'Mar'|'May'|'July'|'Aug'|'Oct'|'Dec'|'January'|'March'|'May'|'July'|'August'|'October'|'December') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) (num)?
-    | ('Apr'|'Jun'|'Sep'|'Nov'|'April'|'June'|'Sepember'|'November') (THIRTY|TWENTYEIGHT|TWENTYNINE) (num)?
+    | ('Apr'|'Jun'|'Sep'|'Nov'|'April'|'June'|'September'|'November') (THIRTY|TWENTYEIGHT|TWENTYNINE) (num)?
     | ('Feb'|'February') TWENTYEIGHT (num)?
 //    | ('1/'|'3/'|'5/'|'7/'|'8/'|'10/'|'12/') (THIRTYONE|TWENTYEIGHT|TWENTYNINE|THIRTY) NUMERICYEAR
 //    | ('4/'|'6/'|'9/'|'11/') (THIRTY|TWENTYEIGHT|TWENTYNINE) NUMERICYEAR
