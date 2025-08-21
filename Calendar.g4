@@ -11,7 +11,7 @@ action: 'Invite' NAME ('to')? NAME ('on')? date
         | 'Repeat' NAME frequency 
         | 'Extend' NAME date duration
         | 'Cancel' NAME (date)?
-        | 'Reminder' NAME (date| date TIME | TIME)
+        | 'Reminder' NAME (date| TIME date | TIME)
         |
         ;
 
